@@ -1,12 +1,25 @@
 import { Badge } from "@/components/ui/badge";
 import { useFadeIn } from "@/hooks/useFadeIn";
+import { useCountUp } from "@/hooks/useCountUp";
 
 const metrics = [
-  { value: "8", label: "módulos" },
-  { value: "18", label: "obras referenciadas" },
-  { value: "200+", label: "pesquisadores citados" },
-  { value: "6", label: "perfis acadêmicos" },
+  { countStart: 0, countEnd: 8, duration: 1200, format: (v: number) => `${v}`, label: "módulos" },
+  { countStart: 0, countEnd: 18, duration: 1400, format: (v: number) => `${v}`, label: "obras referenciadas" },
+  { countStart: 150, countEnd: 200, duration: 1600, format: (v: number) => `${v}+`, label: "pesquisadores citados" },
+  { countStart: 0, countEnd: 6, duration: 1000, format: (v: number) => `${v}`, label: "perfis acadêmicos" },
 ];
+
+const MetricCounter = ({ metric, isVisible }: { metric: (typeof metrics)[0]; isVisible: boolean }) => {
+  const count = useCountUp(metric.countEnd, metric.duration, metric.countStart, isVisible);
+  return (
+    <div className="text-center">
+      <div className="font-heading font-bold text-2xl md:text-3xl text-primary tabular-nums">
+        {metric.format(count)}
+      </div>
+      <div className="text-sm text-muted-foreground mt-1">{metric.label}</div>
+    </div>
+  );
+};
 
 const Hero = () => {
   const { ref, isVisible } = useFadeIn();
@@ -33,10 +46,7 @@ const Hero = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-2xl mx-auto">
           {metrics.map((m) => (
-            <div key={m.label} className="text-center">
-              <div className="font-heading font-bold text-2xl md:text-3xl text-primary">{m.value}</div>
-              <div className="text-sm text-muted-foreground mt-1">{m.label}</div>
-            </div>
+            <MetricCounter key={m.label} metric={m} isVisible={isVisible} />
           ))}
         </div>
       </div>
