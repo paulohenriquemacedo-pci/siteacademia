@@ -1,10 +1,77 @@
 import { useFadeIn } from "@/hooks/useFadeIn";
+import { useCountUp } from "@/hooks/useCountUp";
+
+// Separate counter component so each card has its own animation
+const AnimatedStat = ({
+  stat,
+  index,
+  isVisible,
+}: {
+  stat: (typeof stats)[0];
+  index: number;
+  isVisible: boolean;
+}) => {
+  const count = useCountUp(stat.countEnd, stat.duration, stat.countStart, isVisible);
+
+  const display = stat.format(count);
+
+  return (
+    <div
+      className={`bg-background rounded-lg p-6 border text-center transition-all duration-700 ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+      }`}
+      style={{ transitionDelay: `${(index + 2) * 100}ms` }}
+    >
+      <div
+        className={`font-heading font-bold text-3xl mb-2 tabular-nums ${
+          stat.highlight ? "text-accent" : "text-primary"
+        }`}
+      >
+        {display}
+      </div>
+      <p className="text-sm text-foreground mb-3">{stat.label}</p>
+      <p className="text-xs text-muted-foreground italic">Fonte: {stat.source}</p>
+    </div>
+  );
+};
 
 const stats = [
-  { value: "360.648", label: "pós-graduandos matriculados no Brasil", source: "CAPES, 2022", highlight: false },
-  { value: "40%", label: "taxa de evasão na pós-graduação stricto sensu", source: "CAPES/MEC", highlight: true },
-  { value: "39%", label: "apresentam sintomas de depressão", source: "Evans et al., 2018", highlight: false },
-  { value: "6–8 anos", label: "tempo médio para conclusão do doutorado", source: "CGEE, 2019", highlight: false },
+  {
+    countStart: 300000,
+    countEnd: 360648,
+    duration: 2000,
+    format: (v: number) => v.toLocaleString("pt-BR"),
+    label: "pós-graduandos matriculados no Brasil",
+    source: "CAPES, 2022",
+    highlight: false,
+  },
+  {
+    countStart: 0,
+    countEnd: 40,
+    duration: 1400,
+    format: (v: number) => `${v}%`,
+    label: "taxa de evasão na pós-graduação stricto sensu",
+    source: "CAPES/MEC",
+    highlight: true,
+  },
+  {
+    countStart: 0,
+    countEnd: 39,
+    duration: 1400,
+    format: (v: number) => `${v}%`,
+    label: "apresentam sintomas de depressão",
+    source: "Evans et al., 2018",
+    highlight: false,
+  },
+  {
+    countStart: 6,
+    countEnd: 8,
+    duration: 1000,
+    format: (v: number) => (v === 8 ? "6–8 anos" : `${v} anos`),
+    label: "tempo médio para conclusão do doutorado",
+    source: "CGEE, 2019",
+    highlight: false,
+  },
 ];
 
 const Problem = () => {
@@ -26,17 +93,7 @@ const Problem = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {stats.map((s, i) => (
-            <div
-              key={s.value}
-              className={`bg-background rounded-lg p-6 border text-center transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-              style={{ transitionDelay: `${(i + 2) * 100}ms` }}
-            >
-              <div className={`font-heading font-bold text-3xl mb-2 ${s.highlight ? "text-accent" : "text-primary"}`}>
-                {s.value}
-              </div>
-              <p className="text-sm text-foreground mb-3">{s.label}</p>
-              <p className="text-xs text-muted-foreground italic">Fonte: {s.source}</p>
-            </div>
+            <AnimatedStat key={s.countEnd} stat={s} index={i} isVisible={isVisible} />
           ))}
         </div>
 
