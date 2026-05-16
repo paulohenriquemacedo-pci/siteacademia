@@ -1,9 +1,9 @@
 const footerNav = [
-  { label: "O Método", href: "#sistema" },
-  { label: "O Problema", href: "#problema" },
-  { label: "Base Científica", href: "#ciencia" },
-  { label: "Produtos", href: "#produtos" },
-  { label: "Sobre", href: "#sobre" },
+  { label: "O que é", href: "#o-que-e" },
+  { label: "Problemas", href: "#problemas" },
+  { label: "Os 8 pilares", href: "#sistema" },
+  { label: "Para quem é", href: "#publico" },
+  { label: "FAQ", href: "#faq" },
 ];
 
 const Footer = () => (

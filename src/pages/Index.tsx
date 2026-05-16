@@ -1,12 +1,11 @@
 import Header from "@/components/sections/Header";
 import Hero from "@/components/sections/Hero";
+import WhatIs from "@/components/sections/WhatIs";
 import Problem from "@/components/sections/Problem";
 import System from "@/components/sections/System";
-import NextSteps from "@/components/sections/NextSteps";
-import Science from "@/components/sections/Science";
-import Products from "@/components/sections/Products";
-import Testimonials from "@/components/sections/Testimonials";
-import Manifesto from "@/components/sections/Manifesto";
+import Audience from "@/components/sections/Audience";
+import FAQ from "@/components/sections/FAQ";
+import FinalCTA from "@/components/sections/FinalCTA";
 import Footer from "@/components/sections/Footer";
 
 const Index = () => (
@@ -14,13 +13,12 @@ const Index = () => (
     <Header />
     <main>
       <Hero />
+      <WhatIs />
       <Problem />
       <System />
-      <NextSteps />
-      <Science />
-      <Products />
-      <Testimonials />
-      <Manifesto />
+      <Audience />
+      <FAQ />
+      <FinalCTA />
     </main>
     <Footer />
   </>
