@@ -36,7 +36,7 @@ const Hero = () => {
 
         <h1 className="font-heading font-extrabold text-3xl md:text-5xl lg:text-6xl leading-tight text-primary max-w-3xl mx-auto mb-6">
           O método científico para{" "}
-          <span className="text-accent">pós-graduandos</span> que precisam produzir mais — com saúde
+          <span className="text-accent">pós-graduandos</span> que precisam produzir com mais eficiência e saúde mental
         </h1>
 
         <p className="font-serif text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-12">
