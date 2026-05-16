@@ -25,6 +25,10 @@ const faqs = [
     q: "O Sistema A.C.A.D.E.M.I.A é baseado em qual lógica?",
     a: "Em uma lógica científica e estrutural: parte do diagnóstico do contexto, propõe intervenções com critérios objetivos e usa métricas simples para avaliar progresso e ajustar o caminho.",
   },
+  {
+    q: "O Sistema A.C.A.D.E.M.I.A trata também da saúde mental do pesquisador?",
+    a: "Sim, de forma indireta e estrutural. A pós-graduação concentra altos índices de ansiedade, esgotamento e sintomas depressivos, em grande parte ligados à ausência de método, prazos opacos e culpa difusa. Ao tornar a rotina previsível, reduzir retrabalho e dar clareza sobre o progresso, o sistema diminui a sobrecarga cognitiva e a sensação de estar permanentemente atrasado. Não substitui acompanhamento psicológico ou psiquiátrico, mas atua sobre causas estruturais do sofrimento acadêmico.",
+  },
 ];
 
 const FAQ = () => {
