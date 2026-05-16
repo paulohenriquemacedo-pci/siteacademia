@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+import logoAcademia from "@/assets/logo-sistema-academia.png";
 
 const navLinks = [
   { label: "O Método", href: "#sistema" },
@@ -19,10 +20,12 @@ const Header = () => {
       <div className="container mx-auto flex items-center justify-between h-16 px-4">
         {/* Logo */}
         <a href="#" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded bg-primary flex items-center justify-center">
-            <span className="text-primary-foreground font-heading font-bold text-sm">A</span>
-          </div>
-          <span className="font-heading font-bold text-sm tracking-tight text-primary">
+          <img
+            src={logoAcademia}
+            alt="Logomarca Sistema A.C.A.D.E.M.I.A."
+            className="h-9 w-auto"
+          />
+          <span className="hidden sm:inline font-heading font-bold text-sm tracking-tight text-primary">
             SISTEMA A.C.A.D.E.M.I.
             <span className="text-orange">A</span>.
           </span>
