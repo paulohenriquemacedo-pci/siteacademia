@@ -18,7 +18,7 @@ const Footer = () => (
           <img
             src={logoAcademia}
             alt="Logomarca Sistema A.C.A.D.E.M.I.A."
-            className="h-10 w-auto mb-3 brightness-0 invert"
+            className="h-24 w-auto mb-3 brightness-0 invert"
           />
           <p className="text-primary-foreground/50 text-xs">
             Método de produtividade sustentável para a pós-graduação brasileira.
