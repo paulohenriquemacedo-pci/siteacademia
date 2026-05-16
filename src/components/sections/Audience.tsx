@@ -7,6 +7,7 @@ const forWhom = [
   "Pesquisadores e pós-doutorandos que conciliam pesquisa, ensino e publicações.",
   "Graduandos em TCC que querem concluir o trabalho com método e clareza.",
   "Professores e orientadores interessados em referenciais de produtividade acadêmica.",
+  "Pesquisadores que sentem o peso da pós na saúde mental — ansiedade, esgotamento, culpa — e buscam reorganizar a rotina com método.",
 ];
 
 const notForWhom = [
