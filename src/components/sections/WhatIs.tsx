@@ -49,6 +49,20 @@ const WhatIs = () => {
           falham porque ignoram essa estrutura. O Sistema A.C.A.D.E.M.I.A oferece um quadro de referência
           para diagnosticar onde a pesquisa está travada e atuar com método — não com força de vontade.
         </p>
+
+        <h3 className="font-heading font-bold text-lg text-primary mt-10 mb-3">
+          Produtividade acadêmica e saúde mental do pesquisador
+        </h3>
+        <p className="font-serif text-base md:text-lg text-muted-foreground leading-relaxed">
+          A pós-graduação brasileira é um dos contextos com maior incidência de{" "}
+          <strong>ansiedade, esgotamento e sintomas depressivos</strong>. Boa parte desse sofrimento nasce
+          de um ciclo previsível: prazos opacos, ausência de método, culpa difusa e isolamento. O Sistema
+          A.C.A.D.E.M.I.A trata produtividade e <strong>saúde mental do pesquisador</strong> como dimensões
+          inseparáveis — ao tornar a rotina previsível, reduzir o retrabalho e devolver clareza sobre o
+          que está sendo feito, diminui a sobrecarga cognitiva e a sensação crônica de estar atrasado. Não
+          substitui acompanhamento psicológico ou psiquiátrico, mas remove parte das causas estruturais
+          que alimentam o adoecimento na vida acadêmica.
+        </p>
       </article>
     </section>
   );
