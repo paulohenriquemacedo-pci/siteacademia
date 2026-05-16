@@ -5,11 +5,11 @@ import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/s
 import logoAcademia from "@/assets/logo-sistema-academia.png";
 
 const navLinks = [
-  { label: "O Método", href: "#sistema" },
-  { label: "O Problema", href: "#problema" },
-  { label: "Base Científica", href: "#ciencia" },
-  { label: "Produtos", href: "#produtos" },
-  { label: "Sobre", href: "#sobre" },
+  { label: "O que é", href: "#o-que-e" },
+  { label: "Problemas", href: "#problemas" },
+  { label: "Os 8 pilares", href: "#sistema" },
+  { label: "Para quem é", href: "#publico" },
+  { label: "FAQ", href: "#faq" },
 ];
 
 const Header = () => {
@@ -38,8 +38,8 @@ const Header = () => {
               {l.label}
             </a>
           ))}
-          <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground font-heading text-sm">
-            <a href="#produtos">Conheça o livro →</a>
+          <Button asChild variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground font-heading text-sm">
+            <a href="#sistema">Conheça os módulos</a>
           </Button>
         </nav>
 
@@ -63,8 +63,8 @@ const Header = () => {
                   {l.label}
                 </a>
               ))}
-              <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground font-heading mt-2">
-                <a href="#produtos" onClick={() => setOpen(false)}>Conheça o livro →</a>
+              <Button asChild variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground font-heading mt-2">
+                <a href="#sistema" onClick={() => setOpen(false)}>Conheça os módulos</a>
               </Button>
             </nav>
           </SheetContent>
