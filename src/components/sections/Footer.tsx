@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import logoAcademia from "@/assets/logo-sistema-academia.png";
 
 const footerNav = [
   { label: "O que é", href: "#o-que-e" },
@@ -14,17 +15,13 @@ const Footer = () => (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
         {/* Brand */}
         <div>
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-7 h-7 rounded bg-primary-foreground/20 flex items-center justify-center">
-              <span className="text-primary-foreground font-heading font-bold text-xs">A</span>
-            </div>
-            <span className="font-heading font-bold text-sm text-primary-foreground">
-              SISTEMA A.C.A.D.E.M.I.
-              <span className="text-accent">A</span>.
-            </span>
-          </div>
+          <img
+            src={logoAcademia}
+            alt="Logomarca Sistema A.C.A.D.E.M.I.A."
+            className="h-10 w-auto mb-3 brightness-0 invert"
+          />
           <p className="text-primary-foreground/50 text-xs">
-            Método científico de produtividade para pós-graduandos brasileiros.
+            Método de produtividade sustentável para a pós-graduação brasileira.
           </p>
         </div>
 
@@ -44,8 +41,7 @@ const Footer = () => (
         <div>
           <h4 className="font-heading font-bold text-xs text-primary-foreground/70 uppercase tracking-wider mb-3">Contato</h4>
           <div className="text-sm text-primary-foreground/50 space-y-2">
-            <p>contato@metodopci.com.br</p>
-            <p>Goiânia, GO — Brasil</p>
+            <p>contato@sistemaacademia.com.br</p>
           </div>
         </div>
       </div>
