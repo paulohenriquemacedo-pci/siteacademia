@@ -79,9 +79,6 @@ const System = () => {
               style={{ transitionDelay: `${(i + 2) * 70}ms` }}
             >
               <div className="flex items-baseline gap-2 mb-2">
-                <span className="font-heading text-xs text-muted-foreground tabular-nums">
-                  0{i + 1}
-                </span>
                 <h3 className="font-heading font-bold text-lg text-primary">
                   {p.letter} — {p.title}
                 </h3>
