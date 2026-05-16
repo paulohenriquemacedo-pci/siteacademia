@@ -14,7 +14,7 @@ const Hero = () => {
         className={`container mx-auto text-center transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
       >
         <Badge className="bg-primary/10 text-primary border-primary/20 font-heading text-xs mb-6">
-          Método de produtividade acadêmica · Pós-graduação brasileira
+          Método de produtividade sustentável para a pós-graduação brasileira
         </Badge>
 
         <h1
