@@ -1,9 +1,3 @@
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { useFadeIn } from "@/hooks/useFadeIn";
 
 const faqs = [
@@ -59,18 +53,18 @@ const FAQ = () => {
           Respostas curtas sobre o método, sua aplicação na pós-graduação e seus limites.
         </p>
 
-        <Accordion type="single" collapsible className="w-full">
+        <dl className="w-full space-y-6">
           {faqs.map((f, i) => (
-            <AccordionItem key={i} value={`item-${i}`}>
-              <AccordionTrigger className="text-left font-heading font-semibold text-base text-primary">
+            <div key={i} className="border-b border-border pb-6 last:border-b-0">
+              <dt className="font-heading font-semibold text-base text-primary mb-2">
                 {f.q}
-              </AccordionTrigger>
-              <AccordionContent className="font-serif text-base text-muted-foreground leading-relaxed">
+              </dt>
+              <dd className="font-serif text-base text-muted-foreground leading-relaxed">
                 {f.a}
-              </AccordionContent>
-            </AccordionItem>
+              </dd>
+            </div>
           ))}
-        </Accordion>
+        </dl>
       </div>
     </section>
   );

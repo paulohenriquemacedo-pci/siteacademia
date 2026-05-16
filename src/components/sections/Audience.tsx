@@ -11,7 +11,7 @@ const forWhom = [
 
 const notForWhom = [
   "Quem busca um método milagroso ou promessa de resultado imediato.",
-  "Quem espera uma página de vendas, um curso motivacional ou conteúdo de hype.",
+  "Quem espera dicas esparsas de estrita acadêmica, um curso motivacional ou conteúdo de hype.",
   "Quem não está disposto a adotar rotinas de trabalho e métricas de acompanhamento.",
   "Quem busca atalhos que comprometam o rigor da pesquisa científica.",
 ];
