@@ -27,11 +27,21 @@ const FinalCTA = () => {
             <h3 className="font-heading font-semibold text-xl text-primary-foreground mb-3">
               Pesquisador Produtivo
             </h3>
-            <p className="font-serif text-sm text-primary-foreground/80 mb-6 flex-1">
-              87 páginas e 8 módulos com o sistema completo para projetos
-              acadêmicos de 2 a 6 anos. Para quem quer sair do improviso e
-              estruturar a pesquisa do início ao fim.
+            <p className="font-serif text-sm text-primary-foreground/80 mb-5">
+              Livro-método com 87 páginas e 8 módulos, voltado para mestrandos,
+              doutorandos e pesquisadores que enfrentam projetos longos de 2 a
+              6 anos. Reúne, em um único sistema, o que normalmente fica
+              espalhado em disciplinas, orientações e tentativa-e-erro: como
+              estruturar o projeto, organizar a leitura, escrever de forma
+              contínua e sustentar o ritmo ao longo de toda a pós-graduação.
             </p>
+            <ul className="font-serif text-sm text-primary-foreground/80 space-y-2 mb-6 flex-1">
+              <li className="flex gap-2"><span className="text-accent">—</span> Os 8 módulos do Sistema A.C.A.D.E.M.I.A. aplicados na prática</li>
+              <li className="flex gap-2"><span className="text-accent">—</span> Rotinas de escrita acadêmica para evitar bloqueio e retrabalho</li>
+              <li className="flex gap-2"><span className="text-accent">—</span> Gestão de leitura, fichamento e referencial teórico</li>
+              <li className="flex gap-2"><span className="text-accent">—</span> Planejamento de pesquisa de 2 a 6 anos com marcos realistas</li>
+              <li className="flex gap-2"><span className="text-accent">—</span> Diálogo produtivo com o orientador e entregas mensuráveis</li>
+            </ul>
             <a
               href="https://livro.sistemaacademia.com.br/"
               target="_blank"
@@ -50,11 +60,21 @@ const FinalCTA = () => {
             <h3 className="font-heading font-semibold text-xl text-primary-foreground mb-3">
               Quiz do Perfil de Improdutividade
             </h3>
-            <p className="font-serif text-sm text-primary-foreground/80 mb-6 flex-1">
-              Mapeie em poucos minutos o padrão comportamental que está
-              gerando esforço alto e avanço baixo na sua pesquisa, e receba
-              um relatório com plano de implementação.
+            <p className="font-serif text-sm text-primary-foreground/80 mb-5">
+              Diagnóstico gratuito construído a partir do Sistema A.C.A.D.E.M.I.A.
+              para identificar o padrão comportamental que está gerando muito
+              esforço e pouco avanço mensurável na sua pesquisa. Em poucos
+              minutos, você responde a perguntas sobre rotina, escrita,
+              leitura e relação com o orientador, e recebe um relatório
+              personalizado com o seu perfil e os próximos passos práticos.
             </p>
+            <ul className="font-serif text-sm text-primary-foreground/80 space-y-2 mb-6 flex-1">
+              <li className="flex gap-2"><span className="text-accent">—</span> Identificação do seu perfil de improdutividade acadêmica</li>
+              <li className="flex gap-2"><span className="text-accent">—</span> Análise dos gargalos de escrita, leitura e planejamento</li>
+              <li className="flex gap-2"><span className="text-accent">—</span> Relatório com plano de implementação operacional</li>
+              <li className="flex gap-2"><span className="text-accent">—</span> Base metodológica do livro Pesquisador Produtivo (ISBN/CBL)</li>
+              <li className="flex gap-2"><span className="text-accent">—</span> Sem diagnóstico clínico: mede padrões, não traços fixos</li>
+            </ul>
             <a
               href="https://quizlp.lovable.app"
               target="_blank"
