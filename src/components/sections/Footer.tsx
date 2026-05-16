@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const footerNav = [
   { label: "O que é", href: "#o-que-e" },
   { label: "Problemas", href: "#problemas" },
@@ -52,8 +54,8 @@ const Footer = () => (
       <div className="border-t border-primary-foreground/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-3">
         <p className="text-xs text-primary-foreground/30">© 2025 Método PCI LTDA. Todos os direitos reservados.</p>
         <div className="flex gap-4">
-          <a href="#" className="text-xs text-primary-foreground/30 hover:text-primary-foreground/60 transition-colors">Termos de Uso</a>
-          <a href="#" className="text-xs text-primary-foreground/30 hover:text-primary-foreground/60 transition-colors">Privacidade</a>
+          <Link to="/termos" className="text-xs text-primary-foreground/30 hover:text-primary-foreground/60 transition-colors">Termos de Uso</Link>
+          <Link to="/privacidade" className="text-xs text-primary-foreground/30 hover:text-primary-foreground/60 transition-colors">Privacidade</Link>
         </div>
       </div>
     </div>
