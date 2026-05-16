@@ -23,12 +23,8 @@ const Header = () => {
           <img
             src={logoAcademia}
             alt="Logomarca Sistema A.C.A.D.E.M.I.A."
-            className="h-9 w-auto"
+            className="h-12 w-auto"
           />
-          <span className="hidden sm:inline font-heading font-bold text-sm tracking-tight text-primary">
-            SISTEMA A.C.A.D.E.M.I.
-            <span className="text-orange">A</span>.
-          </span>
         </a>
 
         {/* Desktop nav */}
