@@ -38,7 +38,7 @@ const FAQ = () => {
     <section
       id="faq"
       aria-labelledby="faq-title"
-      className="bg-gray-section py-20 md:py-28 px-4"
+      className="bg-gray-section py-14 md:py-20 px-4"
     >
       <div
         ref={ref}

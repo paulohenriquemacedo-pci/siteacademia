@@ -4,7 +4,7 @@ const FinalCTA = () => {
   const { ref, isVisible } = useFadeIn();
 
   return (
-    <section className="bg-primary py-20 md:py-24 px-4">
+    <section className="bg-primary py-14 md:py-16 px-4">
       <div
         ref={ref}
         className={`container mx-auto max-w-5xl transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}

@@ -34,7 +34,7 @@ const Testimonials = () => {
     <section
       id="depoimentos"
       aria-labelledby="depoimentos-title"
-      className="py-20 md:py-28 px-4"
+      className="py-14 md:py-20 px-4"
     >
       <div ref={ref} className="container mx-auto">
         <div className="max-w-3xl mb-12">

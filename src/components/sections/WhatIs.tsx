@@ -7,7 +7,7 @@ const WhatIs = () => {
     <section
       id="o-que-e"
       aria-labelledby="o-que-e-title"
-      className="py-20 md:py-28 px-4"
+      className="py-14 md:py-20 px-4"
     >
       <article
         ref={ref}
