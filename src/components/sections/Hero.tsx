@@ -29,7 +29,7 @@ const Hero = () => {
           Um método estruturado em <strong className="text-foreground font-semibold">8 pilares</strong> para
           pesquisadores brasileiros que precisam organizar o cronograma de pesquisa, superar o bloqueio de
           escrita e concluir dissertação, tese ou trabalho de conclusão com método que favorece
-          produtividade e saúde mental.
+          tanto a produtividade quanto a saúde mental.
         </p>
 
         <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground mb-10">
