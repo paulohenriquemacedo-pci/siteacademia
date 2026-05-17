@@ -43,7 +43,7 @@ const testimonials: Testimonial[] = [
     avatar: ricardoAvatar,
     screenshot: ricardoScreenshot,
     before: "Não sabia se o método funcionava na prática.",
-    after: "Tive a sorte de participar do grupo de teste e apliquei na dissertação.",
+    after: "Tive a sorte de participar do grupo de teste e apliquei na dissertação. Agora vou aplicar durante o doutoramento.",
   },
   {
     name: "Jana Mara",
