@@ -1,4 +1,7 @@
 import { useFadeIn } from "@/hooks/useFadeIn";
+import juliannaAvatar from "@/assets/testimonials/julianabrandao.png";
+import anaAvatar from "@/assets/testimonials/anapaula.png";
+import ricardoAvatar from "@/assets/testimonials/ricardosousa.png";
 
 type Testimonial = {
   name: string;
@@ -15,7 +18,7 @@ const testimonials: Testimonial[] = [
     name: "Julianna Brandão",
     role: "Graduanda em Biologia, Uni-Anhanguera",
     initials: "JB",
-    avatar: null,
+    avatar: juliannaAvatar,
     screenshot: null,
     before: "Eu não conseguia manter uma rotina de escrita.",
     after: "Consegui organizar minha rotina acadêmica e concluí meu TCC antes do prazo.",
@@ -24,7 +27,7 @@ const testimonials: Testimonial[] = [
     name: "Ana Paula",
     role: "Mestranda em Economia, UnB",
     initials: "AP",
-    avatar: null,
+    avatar: anaAvatar,
     screenshot: null,
     before: "Cada sessão de trabalho era sofrimento.",
     after: "Finalmente produzo mais sem sofrimento!",
@@ -33,7 +36,7 @@ const testimonials: Testimonial[] = [
     name: "Ricardo Sousa",
     role: "Doutorando em Engenharia de Produtos, UFSC",
     initials: "RS",
-    avatar: null,
+    avatar: ricardoAvatar,
     screenshot: null,
     before: "Não sabia se o método funcionava na prática.",
     after: "Tive a sorte de participar do grupo de teste e apliquei na dissertação.",
