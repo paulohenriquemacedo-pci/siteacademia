@@ -8,18 +8,26 @@ import Testimonials from "@/components/sections/Testimonials";
 import FAQ from "@/components/sections/FAQ";
 import FinalCTA from "@/components/sections/FinalCTA";
 import Footer from "@/components/sections/Footer";
+import SectionDivider from "@/components/SectionDivider";
 
 const Index = () => (
   <>
     <Header />
     <main>
       <Hero />
+      <SectionDivider />
       <WhatIs />
+      <SectionDivider />
       <Problem />
+      <SectionDivider />
       <System />
+      <SectionDivider />
       <Audience />
+      <SectionDivider />
       <Testimonials />
+      <SectionDivider />
       <FAQ />
+      <SectionDivider />
       <FinalCTA />
     </main>
     <Footer />
