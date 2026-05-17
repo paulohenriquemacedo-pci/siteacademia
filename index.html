@@ -22,6 +22,18 @@
     <meta name="twitter:description" content="Método com 8 pilares para mestrandos, doutorandos e graduandos em TCC." />
     <meta name="twitter:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/stMEng1BDrXePdtJt7BcMV1OyJl2/social-images/social-1771360563787-1.webp" />
 
+    <script>
+      // Bloqueia indexação em hosts que não sejam o domínio próprio (ex.: *.lovable.app, preview)
+      (function () {
+        var h = location.hostname;
+        if (h !== 'sistemaacademia.com.br' && h !== 'www.sistemaacademia.com.br') {
+          var m = document.querySelector('meta[name="robots"]');
+          if (!m) { m = document.createElement('meta'); m.setAttribute('name', 'robots'); document.head.appendChild(m); }
+          m.setAttribute('content', 'noindex, nofollow');
+        }
+      })();
+    </script>
+
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
