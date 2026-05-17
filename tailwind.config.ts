@@ -18,6 +18,12 @@ export default {
         body: ["DM Sans", "sans-serif"],
         serif: ["Source Serif 4", "serif"],
       },
+      fontSize: {
+        xs: ["0.9375rem", { lineHeight: "1.4rem" }],
+        sm: ["1.09375rem", { lineHeight: "1.6rem" }],
+        base: ["1.25rem", { lineHeight: "1.85rem" }],
+        lg: ["1.40625rem", { lineHeight: "2rem" }],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
