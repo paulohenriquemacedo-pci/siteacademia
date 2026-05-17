@@ -1,38 +1,49 @@
 import { useFadeIn } from "@/hooks/useFadeIn";
-import juliannaPhoto from "@/assets/testimonials/julianna.jpg";
-import ricardoPhoto from "@/assets/testimonials/ricardo.jpg";
-import anaPhoto from "@/assets/testimonials/ana.jpg";
 
-const testimonials = [
+type Testimonial = {
+  name: string;
+  role: string;
+  initials: string;
+  avatar?: string | null;
+  screenshot?: string | null;
+  before: string;
+  after: string;
+};
+
+const testimonials: Testimonial[] = [
   {
     name: "Julianna Brandão",
     role: "Graduanda em Biologia, Uni-Anhanguera",
-    photo: juliannaPhoto,
     initials: "JB",
+    avatar: null,
+    screenshot: null,
     before: "Eu não conseguia manter uma rotina de escrita.",
     after: "Consegui organizar minha rotina acadêmica e concluí meu TCC antes do prazo.",
   },
   {
     name: "Ana Paula",
     role: "Mestranda em Economia, UnB",
-    photo: anaPhoto,
     initials: "AP",
+    avatar: null,
+    screenshot: null,
     before: "Cada sessão de trabalho era sofrimento.",
     after: "Finalmente produzo mais sem sofrimento!",
   },
   {
     name: "Ricardo Sousa",
     role: "Doutorando em Engenharia de Produtos, UFSC",
-    photo: ricardoPhoto,
     initials: "RS",
+    avatar: null,
+    screenshot: null,
     before: "Não sabia se o método funcionava na prática.",
     after: "Tive a sorte de participar do grupo de teste e apliquei na dissertação.",
   },
   {
     name: "Jana Mara",
     role: "Mestre em Literatura Brasileira, UFBA",
-    photo: null,
     initials: "JM",
+    avatar: null,
+    screenshot: null,
     before: "Sentia que nunca ia terminar.",
     after: "O sistema me deu clareza para finalizar minha dissertação com confiança.",
   },
@@ -89,10 +100,23 @@ const Testimonials = () => {
                   </p>
                 </div>
               </div>
-              <footer className="pt-4 border-t border-border flex items-center gap-3">
-                {t.photo ? (
+
+              {t.screenshot && (
+                <figure className="mb-5">
                   <img
-                    src={t.photo}
+                    src={t.screenshot}
+                    alt={`Print do depoimento de ${t.name}`}
+                    loading="lazy"
+                    className="w-full rounded-md border border-border"
+                  />
+                  <figcaption className="sr-only">Captura de tela original do depoimento</figcaption>
+                </figure>
+              )}
+
+              <footer className="pt-4 border-t border-border flex items-center gap-3">
+                {t.avatar ? (
+                  <img
+                    src={t.avatar}
                     alt={`Foto de ${t.name}`}
                     loading="lazy"
                     className="h-12 w-12 rounded-full object-cover border border-border shrink-0"
