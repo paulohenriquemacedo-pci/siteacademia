@@ -7,7 +7,7 @@ const Hero = () => {
   return (
     <section
       aria-labelledby="hero-title"
-      className="pt-32 pb-20 md:pt-40 md:pb-28 px-4"
+      className="pt-24 pb-14 md:pt-32 md:pb-20 px-4"
     >
       <div
         ref={ref}

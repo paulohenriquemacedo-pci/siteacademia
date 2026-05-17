@@ -4,7 +4,7 @@ const Manifesto = () => {
   const { ref, isVisible } = useFadeIn();
 
   return (
-    <section id="sobre" className="bg-primary py-20 md:py-28 px-4">
+    <section id="sobre" className="bg-primary py-14 md:py-20 px-4">
       <div ref={ref} className="container mx-auto">
         <h2
           className={`font-heading font-bold text-2xl md:text-3xl text-primary-foreground text-center mb-12 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}

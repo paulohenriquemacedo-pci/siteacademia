@@ -34,7 +34,7 @@ const Glossary = () => {
     <section
       id="glossario"
       aria-labelledby="glossario-title"
-      className="py-20 md:py-24 px-4"
+      className="py-14 md:py-16 px-4"
     >
       <div
         ref={ref}

@@ -25,7 +25,7 @@ const Science = () => {
   const { ref, isVisible } = useFadeIn();
 
   return (
-    <section id="ciencia" className="bg-gray-section py-20 md:py-28 px-4">
+    <section id="ciencia" className="bg-gray-section py-14 md:py-20 px-4">
       <div ref={ref} className="container mx-auto">
         <h2
           className={`font-heading font-bold text-2xl md:text-3xl text-primary text-center mb-4 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
