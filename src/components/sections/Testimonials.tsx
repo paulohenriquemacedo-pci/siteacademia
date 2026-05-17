@@ -1,4 +1,11 @@
 import { useFadeIn } from "@/hooks/useFadeIn";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from "@/components/ui/carousel";
 import juliannaAvatar from "@/assets/testimonials/julianabrandao.png";
 import anaAvatar from "@/assets/testimonials/anapaula.png";
 import ricardoAvatar from "@/assets/testimonials/ricardosousa.png";
