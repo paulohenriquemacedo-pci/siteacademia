@@ -2,6 +2,10 @@ import { useFadeIn } from "@/hooks/useFadeIn";
 import juliannaAvatar from "@/assets/testimonials/julianabrandao.png";
 import anaAvatar from "@/assets/testimonials/anapaula.png";
 import ricardoAvatar from "@/assets/testimonials/ricardosousa.png";
+import juliannaScreenshot from "@/assets/testimonials/julianna-screenshot.jpeg";
+import anaScreenshot from "@/assets/testimonials/ana-screenshot.png";
+import ricardoScreenshot from "@/assets/testimonials/ricardo-screenshot.png";
+import janaScreenshot from "@/assets/testimonials/jana-screenshot.png";
 
 type Testimonial = {
   name: string;
@@ -19,7 +23,7 @@ const testimonials: Testimonial[] = [
     role: "Graduanda em Biologia, Uni-Anhanguera",
     initials: "JB",
     avatar: juliannaAvatar,
-    screenshot: null,
+    screenshot: juliannaScreenshot,
     before: "Eu não conseguia manter uma rotina de escrita.",
     after: "Consegui organizar minha rotina acadêmica e concluí meu TCC antes do prazo.",
   },
@@ -28,7 +32,7 @@ const testimonials: Testimonial[] = [
     role: "Mestranda em Economia, UnB",
     initials: "AP",
     avatar: anaAvatar,
-    screenshot: null,
+    screenshot: anaScreenshot,
     before: "Cada sessão de trabalho era sofrimento.",
     after: "Finalmente produzo mais sem sofrimento!",
   },
@@ -37,7 +41,7 @@ const testimonials: Testimonial[] = [
     role: "Doutorando em Engenharia de Produtos, UFSC",
     initials: "RS",
     avatar: ricardoAvatar,
-    screenshot: null,
+    screenshot: ricardoScreenshot,
     before: "Não sabia se o método funcionava na prática.",
     after: "Tive a sorte de participar do grupo de teste e apliquei na dissertação.",
   },
@@ -46,7 +50,7 @@ const testimonials: Testimonial[] = [
     role: "Mestre em Literatura Brasileira, UFBA",
     initials: "JM",
     avatar: null,
-    screenshot: null,
+    screenshot: janaScreenshot,
     before: "Sentia que nunca ia terminar.",
     after: "O sistema me deu clareza para finalizar minha dissertação com confiança.",
   },
