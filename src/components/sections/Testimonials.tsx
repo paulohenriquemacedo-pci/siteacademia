@@ -1,4 +1,11 @@
 import { useFadeIn } from "@/hooks/useFadeIn";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from "@/components/ui/carousel";
 import juliannaAvatar from "@/assets/testimonials/julianabrandao.png";
 import anaAvatar from "@/assets/testimonials/anapaula.png";
 import ricardoAvatar from "@/assets/testimonials/ricardosousa.png";
@@ -82,68 +89,75 @@ const Testimonials = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {testimonials.map((t, i) => (
-            <article
-              key={t.name}
-              className={`bg-background rounded-lg p-7 border border-border transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-              style={{ transitionDelay: `${(i + 1) * 100}ms` }}
-            >
-              <div className="space-y-4 mb-5">
-                <div>
-                  <p className="font-heading text-xs uppercase tracking-wider text-muted-foreground mb-1">
-                    Antes
-                  </p>
-                  <p className="font-serif text-base text-foreground leading-relaxed">
-                    “{t.before}”
-                  </p>
-                </div>
-                <div>
-                  <p className="font-heading text-xs uppercase tracking-wider text-accent mb-1">
-                    Depois
-                  </p>
-                  <p className="font-serif text-base text-foreground leading-relaxed">
-                    “{t.after}”
-                  </p>
-                </div>
-              </div>
-
-              {t.screenshot && (
-                <figure className="mb-5">
-                  <img
-                    src={t.screenshot}
-                    alt={`Print do depoimento de ${t.name}`}
-                    loading="lazy"
-                    className="w-full rounded-md border border-border"
-                  />
-                  <figcaption className="sr-only">Captura de tela original do depoimento</figcaption>
-                </figure>
-              )}
-
-              <footer className="pt-4 border-t border-border flex items-center gap-3">
-                {t.avatar ? (
-                  <img
-                    src={t.avatar}
-                    alt={`Foto de ${t.name}`}
-                    loading="lazy"
-                    className="h-12 w-12 rounded-full object-cover border border-border shrink-0"
-                  />
-                ) : (
-                  <div
-                    aria-hidden="true"
-                    className="h-12 w-12 rounded-full bg-primary/10 text-primary flex items-center justify-center font-heading font-bold text-sm shrink-0"
-                  >
-                    {t.initials}
+        <Carousel
+          opts={{ align: "start", loop: true }}
+          className={`transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+        >
+          <CarouselContent className="-ml-5">
+            {testimonials.map((t) => (
+              <CarouselItem key={t.name} className="pl-5 md:basis-1/2">
+                <article className="h-full bg-background rounded-lg p-7 border border-border">
+                  <div className="space-y-4 mb-5">
+                    <div>
+                      <p className="font-heading text-xs uppercase tracking-wider text-muted-foreground mb-1">
+                        Antes
+                      </p>
+                      <p className="font-serif text-base text-foreground leading-relaxed">
+                        “{t.before}”
+                      </p>
+                    </div>
+                    <div>
+                      <p className="font-heading text-xs uppercase tracking-wider text-accent mb-1">
+                        Depois
+                      </p>
+                      <p className="font-serif text-base text-foreground leading-relaxed">
+                        “{t.after}”
+                      </p>
+                    </div>
                   </div>
-                )}
-                <div>
-                  <p className="font-heading font-bold text-sm text-primary">{t.name}</p>
-                  <p className="text-xs text-muted-foreground">{t.role}</p>
-                </div>
-              </footer>
-            </article>
-          ))}
-        </div>
+
+                  {t.screenshot && (
+                    <figure className="mb-5">
+                      <img
+                        src={t.screenshot}
+                        alt={`Print do depoimento de ${t.name}`}
+                        loading="lazy"
+                        className="w-full rounded-md border border-border"
+                      />
+                      <figcaption className="sr-only">Captura de tela original do depoimento</figcaption>
+                    </figure>
+                  )}
+
+                  <footer className="pt-4 border-t border-border flex items-center gap-3">
+                    {t.avatar ? (
+                      <img
+                        src={t.avatar}
+                        alt={`Foto de ${t.name}`}
+                        loading="lazy"
+                        className="h-12 w-12 rounded-full object-cover border border-border shrink-0"
+                      />
+                    ) : (
+                      <div
+                        aria-hidden="true"
+                        className="h-12 w-12 rounded-full bg-primary/10 text-primary flex items-center justify-center font-heading font-bold text-sm shrink-0"
+                      >
+                        {t.initials}
+                      </div>
+                    )}
+                    <div>
+                      <p className="font-heading font-bold text-sm text-primary">{t.name}</p>
+                      <p className="text-xs text-muted-foreground">{t.role}</p>
+                    </div>
+                  </footer>
+                </article>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <div className="flex justify-end gap-2 mt-6">
+            <CarouselPrevious className="static translate-y-0" />
+            <CarouselNext className="static translate-y-0" />
+          </div>
+        </Carousel>
       </div>
     </section>
   );
