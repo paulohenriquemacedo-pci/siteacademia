@@ -187,7 +187,8 @@ const BlogPostPage = () => {
               <span className="text-sm font-bold text-slate-900">Ações:</span>
               <button 
                 onClick={() => {
-                  navigator.clipboard.writeText(`https://sistemaacademia.com.br/blog/${slug}`);
+                  const canonicalUrl = `https://sistemaacademia.com.br/blog/${slug}`;
+                  navigator.clipboard.writeText(canonicalUrl);
                   toast.success("Link copiado!");
                 }}
                 className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-slate-100 text-slate-500 transition-colors text-sm"
@@ -198,11 +199,12 @@ const BlogPostPage = () => {
               </button>
 
               <a 
-                href={`https://www.facebook.com/sharer.php?u=${encodeURIComponent(`https://sistemaacademia.com.br/blog/${slug}`)}`}
+                href={`https://www.facebook.com/sharer.php?u=${encodeURIComponent(`https://sistemaacademia.com.br/blog/${slug}`)}&src=sdkpreparse`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-[#1877F2] hover:text-white text-[#1877F2] transition-colors text-sm border border-slate-100"
                 title="Compartilhar no Facebook"
+                data-href={`https://sistemaacademia.com.br/blog/${slug}`}
               >
                 <Facebook className="w-4 h-4" />
                 Facebook
