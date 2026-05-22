@@ -11,40 +11,6 @@ import { toast } from "sonner";
 const BlogPostPage = () => {
   const { slug } = useParams();
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    
-    // Add og tags dynamically to the head to help crawlers
-    const canonicalUrl = `https://sistemaacademia.com.br/blog/${slug}`;
-    const title = `${post?.title} | Sistema A.C.A.D.E.M.I.A`;
-    const description = post?.excerpt || "Leia mais sobre este post no blog do Sistema A.C.A.D.E.M.I.A";
-    const imageUrl = post?.image_url || "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&auto=format&fit=crop&q=60";
-
-    const updateMeta = (property: string, content: string, attr: string = 'property') => {
-      let element = document.querySelector(`meta[${attr}="${property}"]`);
-      if (!element) {
-        element = document.createElement('meta');
-        element.setAttribute(attr, property);
-        document.head.appendChild(element);
-      }
-      element.setAttribute('content', content);
-    };
-
-    updateMeta('og:url', canonicalUrl);
-    updateMeta('og:title', title);
-    updateMeta('og:description', description);
-    updateMeta('og:image', imageUrl);
-    updateMeta('description', description, 'name');
-
-    let linkCanonical = document.querySelector('link[rel="canonical"]');
-    if (!linkCanonical) {
-      linkCanonical = document.createElement('link');
-      linkCanonical.setAttribute('rel', 'canonical');
-      document.head.appendChild(linkCanonical);
-    }
-    linkCanonical.setAttribute('href', canonicalUrl);
-  }, [slug, post]);
-
   const { data: post, isLoading } = useQuery({
     queryKey: ["blog-post", slug],
     queryFn: async () => {
@@ -58,6 +24,46 @@ const BlogPostPage = () => {
         .single();
       
       if (error) throw error;
+      return data;
+    },
+    enabled: !!slug
+  });
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    
+    if (post) {
+      // Add og tags dynamically to the head to help crawlers
+      const canonicalUrl = `https://sistemaacademia.com.br/blog/${slug}`;
+      const title = `${post.title} | Sistema A.C.A.D.E.M.I.A`;
+      const description = post.excerpt || "Leia mais sobre este post no blog do Sistema A.C.A.D.E.M.I.A";
+      const imageUrl = post.image_url || "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&auto=format&fit=crop&q=60";
+
+      const updateMeta = (property: string, content: string, attr: string = 'property') => {
+        let element = document.querySelector(`meta[${attr}="${property}"]`);
+        if (!element) {
+          element = document.createElement('meta');
+          element.setAttribute(attr, property);
+          document.head.appendChild(element);
+        }
+        element.setAttribute('content', content);
+      };
+
+      updateMeta('og:url', canonicalUrl);
+      updateMeta('og:title', title);
+      updateMeta('og:description', description);
+      updateMeta('og:image', imageUrl);
+      updateMeta('description', description, 'name');
+
+      let linkCanonical = document.querySelector('link[rel="canonical"]');
+      if (!linkCanonical) {
+        linkCanonical = document.createElement('link');
+        linkCanonical.setAttribute('rel', 'canonical');
+        document.head.appendChild(linkCanonical);
+      }
+      linkCanonical.setAttribute('href', canonicalUrl);
+    }
+  }, [slug, post]);
       return data;
     },
     enabled: !!slug
