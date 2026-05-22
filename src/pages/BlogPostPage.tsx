@@ -33,7 +33,6 @@ const BlogPostPage = () => {
     window.scrollTo(0, 0);
     
     if (post) {
-      // Add og tags dynamically to the head to help crawlers
       const canonicalUrl = `https://sistemaacademia.com.br/blog/${slug}`;
       const title = `${post.title} | Sistema A.C.A.D.E.M.I.A`;
       const description = post.excerpt || "Leia mais sobre este post no blog do Sistema A.C.A.D.E.M.I.A";
@@ -64,10 +63,6 @@ const BlogPostPage = () => {
       linkCanonical.setAttribute('href', canonicalUrl);
     }
   }, [slug, post]);
-      return data;
-    },
-    enabled: !!slug
-  });
 
   if (isLoading) {
     return (
