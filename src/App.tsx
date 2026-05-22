@@ -8,6 +8,9 @@ import Termos from "./pages/Termos";
 import Privacidade from "./pages/Privacidade";
 import BlogIndex from "./pages/BlogIndex";
 import BlogPostPage from "./pages/BlogPostPage";
+import Auth from "./pages/Auth";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminPostEditor from "./pages/AdminPostEditor";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,6 +25,10 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/blog" element={<BlogIndex />} />
           <Route path="/blog/:slug" element={<BlogPostPage />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/posts/new" element={<AdminPostEditor />} />
+          <Route path="/admin/posts/edit/:id" element={<AdminPostEditor />} />
           <Route path="/termos" element={<Termos />} />
           <Route path="/privacidade" element={<Privacidade />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

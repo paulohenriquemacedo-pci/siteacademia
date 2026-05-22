@@ -28,7 +28,8 @@ export default function AdminPostEditor() {
     category: "",
     image_url: "",
     read_time: "",
-    published: false
+    published: false,
+    published_at: null as string | null
   });
 
   useEffect(() => {
