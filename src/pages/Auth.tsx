@@ -28,8 +28,7 @@ export default function Auth() {
         });
         if (error) throw error;
         toast.success("Login realizado com sucesso!");
-        navigate("/admin", { replace: true });
-        window.location.reload(); // Garante que o estado de auth seja reiniciado
+        navigate("/admin");
       } else {
         const { error } = await supabase.auth.signUp({
           email,
