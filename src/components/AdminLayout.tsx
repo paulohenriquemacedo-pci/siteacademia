@@ -27,15 +27,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   };
 
   if (loading) {
-    return <div className="flex h-screen items-center justify-center">Carregando...</div>;
+    return (
+      <div className="flex h-screen flex-col items-center justify-center gap-4">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-academy-600 border-t-transparent"></div>
+        <p className="text-gray-500 animate-pulse">Carregando painel...</p>
+      </div>
+    );
   }
 
   if (!profile) {
     return (
-      <div className="flex h-screen flex-col items-center justify-center gap-4">
-        <h1 className="text-2xl font-bold">Acesso Negado</h1>
-        <p>Você precisa estar logado para acessar esta área.</p>
-        <Button onClick={() => navigate("/auth")}>Ir para Login</Button>
+      <div className="flex h-screen flex-col items-center justify-center gap-4 bg-gray-50">
+        <div className="bg-white p-8 rounded-xl shadow-lg text-center max-w-md w-full mx-4">
+          <X className="h-12 w-12 text-red-500 mx-auto mb-4" />
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Acesso Negado</h1>
+          <p className="text-gray-600 mb-6">Você precisa estar logado para acessar esta área.</p>
+          <Button className="w-full" onClick={() => navigate("/auth")}>Ir para Login</Button>
+        </div>
       </div>
     );
   }

@@ -30,7 +30,7 @@ export default function Auth() {
         });
         if (error) throw error;
         toast.success("Login realizado com sucesso!");
-        navigate("/admin");
+        window.location.href = "/admin"; // Forçar recarregamento para garantir estado limpo
       } else {
         const { error } = await supabase.auth.signUp({
           email,
