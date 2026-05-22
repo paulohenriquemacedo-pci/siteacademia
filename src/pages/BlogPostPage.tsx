@@ -38,29 +38,30 @@ const BlogPostPage = () => {
       const description = post.excerpt || "Leia mais sobre este post no blog do Sistema A.C.A.D.E.M.I.A";
       const imageUrl = post.image_url || "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&auto=format&fit=crop&q=60";
 
+      // Function to force update meta tags that crawlers look for
       const updateMeta = (property: string, content: string, attr: string = 'property') => {
-        let element = document.querySelector(`meta[${attr}="${property}"]`);
-        if (!element) {
-          element = document.createElement('meta');
-          element.setAttribute(attr, property);
-          document.head.appendChild(element);
-        }
+        // Remove existing ones to avoid duplicates
+        document.querySelectorAll(`meta[${attr}="${property}"]`).forEach(el => el.remove());
+        
+        const element = document.createElement('meta');
+        element.setAttribute(attr, property);
         element.setAttribute('content', content);
+        document.head.appendChild(element);
       };
 
       updateMeta('og:url', canonicalUrl);
       updateMeta('og:title', title);
       updateMeta('og:description', description);
       updateMeta('og:image', imageUrl);
+      updateMeta('og:type', 'article');
       updateMeta('description', description, 'name');
 
-      let linkCanonical = document.querySelector('link[rel="canonical"]');
-      if (!linkCanonical) {
-        linkCanonical = document.createElement('link');
-        linkCanonical.setAttribute('rel', 'canonical');
-        document.head.appendChild(linkCanonical);
-      }
+      // Force canonical link
+      document.querySelectorAll('link[rel="canonical"]').forEach(el => el.remove());
+      const linkCanonical = document.createElement('link');
+      linkCanonical.setAttribute('rel', 'canonical');
       linkCanonical.setAttribute('href', canonicalUrl);
+      document.head.appendChild(linkCanonical);
     }
   }, [slug, post]);
 
