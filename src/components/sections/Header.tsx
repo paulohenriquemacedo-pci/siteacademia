@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import logoAcademia from "@/assets/logo-sistema-academia.png";
 
 const navLinks = [
-  { label: "O que é", href: "#o-que-e" },
-  { label: "Problemas", href: "#problemas" },
-  { label: "Os 8 pilares", href: "#sistema" },
-  { label: "Para quem é", href: "#publico" },
-  { label: "FAQ", href: "#faq" },
+  { label: "O que é", href: "/#o-que-e" },
+  { label: "Os 8 pilares", href: "/#sistema" },
+  { label: "Blog", href: "/blog" },
+  { label: "FAQ", href: "/#faq" },
 ];
 
 const Header = () => {
@@ -19,13 +19,13 @@ const Header = () => {
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="container mx-auto flex items-center justify-between h-16 px-4">
         {/* Logo */}
-        <a href="#" className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2">
           <img
             src={logoAcademia}
             alt="Logomarca Sistema A.C.A.D.E.M.I.A."
             className="h-12 w-auto"
           />
-        </a>
+        </Link>
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-6">
