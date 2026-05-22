@@ -1,10 +1,24 @@
-import { blogPosts } from "@/lib/blog-data";
 import BlogCard from "../BlogCard";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
 
 const BlogSection = () => {
-  const recentPosts = blogPosts.slice(0, 3);
+  const { data: recentPosts, isLoading } = useQuery({
+    queryKey: ["recent-blog-posts"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("posts")
+        .select("*")
+        .eq("published", true)
+        .order("published_at", { ascending: false })
+        .limit(3);
+      
+      if (error) throw error;
+      return data;
+    }
+  });
 
   return (
     <section id="blog" className="py-24 bg-slate-50">
@@ -26,11 +40,15 @@ const BlogSection = () => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {recentPosts.map((post) => (
-            <BlogCard key={post.id} post={post} />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="text-center py-10">Carregando...</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {recentPosts?.map((post) => (
+              <BlogCard key={post.id} post={post} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

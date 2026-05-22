@@ -1,13 +1,28 @@
 import Header from "@/components/sections/Header";
 import Footer from "@/components/sections/Footer";
 import BlogCard from "@/components/BlogCard";
-import { blogPosts } from "@/lib/blog-data";
 import { useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
 
 const BlogIndex = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const { data: posts, isLoading } = useQuery({
+    queryKey: ["blog-posts"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("posts")
+        .select("*")
+        .eq("published", true)
+        .order("published_at", { ascending: false });
+      
+      if (error) throw error;
+      return data;
+    }
+  });
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -23,11 +38,20 @@ const BlogIndex = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.map((post) => (
-              <BlogCard key={post.id} post={post} />
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="text-center py-20">Carregando posts...</div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {posts?.map((post) => (
+                <BlogCard key={post.id} post={post} />
+              ))}
+              {posts?.length === 0 && (
+                <div className="col-span-full text-center py-10 text-slate-500">
+                  Nenhum post publicado ainda.
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </main>
       <Footer />
