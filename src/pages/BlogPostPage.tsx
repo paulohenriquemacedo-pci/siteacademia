@@ -1,7 +1,7 @@
 import { useParams, Link, Navigate } from "react-router-dom";
 import Header from "@/components/sections/Header";
 import Footer from "@/components/sections/Footer";
-import { Calendar, Clock, ChevronLeft, Share2 } from "lucide-react";
+import { Calendar, Clock, ChevronLeft, Share2, Download } from "lucide-react";
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
@@ -117,18 +117,31 @@ const BlogPostPage = () => {
           </div>
 
           <footer className="mt-16 pt-8 border-t border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="flex items-center gap-4">
-              <span className="text-sm font-bold text-slate-900">Compartilhe este artigo:</span>
+            <div className="flex flex-wrap items-center gap-4">
+              <span className="text-sm font-bold text-slate-900">Ações:</span>
               <button 
                 onClick={() => {
                   navigator.clipboard.writeText(window.location.href);
-                  alert("Link copiado!");
+                  toast.success("Link copiado!");
                 }}
-                className="p-2 rounded-full hover:bg-slate-100 text-slate-500 transition-colors"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-slate-100 text-slate-500 transition-colors text-sm"
                 title="Copiar link"
               >
-                <Share2 className="w-5 h-5" />
+                <Share2 className="w-4 h-4" />
+                Compartilhar
               </button>
+              {post.image_url && (
+                <a 
+                  href={post.image_url}
+                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-slate-100 text-slate-500 transition-colors text-sm"
+                >
+                  <Download className="w-4 h-4" />
+                  Baixar Imagem
+                </a>
+              )}
             </div>
             
             <Link 
