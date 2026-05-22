@@ -13,6 +13,25 @@ const BlogPostPage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    
+    // Add og:url dynamically to the head to help crawlers
+    const canonicalUrl = `https://sistemaacademia.com.br/blog/${slug}`;
+    let metaUrl = document.querySelector('meta[property="og:url"]');
+    if (!metaUrl) {
+      metaUrl = document.createElement('meta');
+      metaUrl.setAttribute('property', 'og:url');
+      document.head.appendChild(metaUrl);
+    }
+    metaUrl.setAttribute('content', canonicalUrl);
+
+    // Also update canonical link
+    let linkCanonical = document.querySelector('link[rel="canonical"]');
+    if (!linkCanonical) {
+      linkCanonical = document.createElement('link');
+      linkCanonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(linkCanonical);
+    }
+    linkCanonical.setAttribute('href', canonicalUrl);
   }, [slug]);
 
   const { data: post, isLoading } = useQuery({
