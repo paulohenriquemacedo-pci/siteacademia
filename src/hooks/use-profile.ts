@@ -15,9 +15,13 @@ export function useProfile() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    let mounted = true;
+
     async function getProfile() {
       try {
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+        if (!mounted) return;
 
         if (sessionError) {
           console.error("Session error:", sessionError);
@@ -36,6 +40,8 @@ export function useProfile() {
           .eq("id", session.user.id)
           .maybeSingle();
 
+        if (!mounted) return;
+
         if (error) {
           console.error("Error fetching profile:", error);
         } else {
@@ -44,7 +50,7 @@ export function useProfile() {
       } catch (err) {
         console.error("Unexpected error in useProfile:", err);
       } finally {
-        setLoading(false);
+        if (mounted) setLoading(false);
       }
     }
 
@@ -52,25 +58,26 @@ export function useProfile() {
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        if (!mounted) return;
+        
         if (session) {
-          const { data, error } = await supabase
+          const { data } = await supabase
             .from("profiles")
             .select("*")
             .eq("id", session.user.id)
             .maybeSingle();
-          
-          if (error) {
-            console.error("Error refetching profile:", error);
-          } else {
-            setProfile(data);
-          }
+          if (mounted) setProfile(data);
         } else {
-          setProfile(null);
+          if (mounted) {
+            setProfile(null);
+            setLoading(false);
+          }
         }
       }
     );
 
     return () => {
+      mounted = false;
       authListener.subscription.unsubscribe();
     };
   }, []);
