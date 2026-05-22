@@ -1,7 +1,7 @@
 import { useParams, Link, Navigate } from "react-router-dom";
 import Header from "@/components/sections/Header";
 import Footer from "@/components/sections/Footer";
-import { Calendar, Clock, ChevronLeft, Share2, Download } from "lucide-react";
+import { Calendar, Clock, ChevronLeft, Share2, Download, Facebook, MessageCircle } from "lucide-react";
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
@@ -129,8 +129,31 @@ const BlogPostPage = () => {
                 title="Copiar link"
               >
                 <Share2 className="w-4 h-4" />
-                Compartilhar
+                Copiar
               </button>
+
+              <a 
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-[#1877F2] hover:text-white text-[#1877F2] transition-colors text-sm border border-slate-100"
+                title="Compartilhar no Facebook"
+              >
+                <Facebook className="w-4 h-4" />
+                Facebook
+              </a>
+
+              <a 
+                href={`https://api.whatsapp.com/send?text=${encodeURIComponent(post.title + " - " + window.location.href)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-[#25D366] hover:text-white text-[#25D366] transition-colors text-sm border border-slate-100"
+                title="Compartilhar no WhatsApp"
+              >
+                <MessageCircle className="w-4 h-4" />
+                WhatsApp
+              </a>
+
               {post.image_url && (
                 <a 
                   href={post.image_url}
