@@ -17,6 +17,7 @@ export function useProfile() {
 
     async function getProfile(userId: string) {
       try {
+        console.log("Fetching profile for:", userId);
         const { data, error } = await supabase
           .from("profiles")
           .select("*")
@@ -26,8 +27,14 @@ export function useProfile() {
         if (mounted) {
           if (error) {
             console.error("Error fetching profile:", error);
-          } else {
+          } else if (data) {
+            console.log("Profile found:", data);
             setProfile(data);
+          } else {
+            console.log("No profile found for user, but user is authenticated");
+            // Se não houver perfil mas o usuário está logado, podemos criar um objeto básico 
+            // ou apenas deixar como null e o AdminLayout lidará com isso.
+            setProfile({ id: userId, full_name: "Usuário", role: "user", avatar_url: null });
           }
           setLoading(false);
         }
@@ -37,8 +44,15 @@ export function useProfile() {
       }
     }
 
-    async function checkSession() {
-      const { data: { session } } = await supabase.auth.getSession();
+    const init = async () => {
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError) {
+        console.error("Session error:", sessionError);
+        if (mounted) setLoading(false);
+        return;
+      }
+
       if (session?.user) {
         await getProfile(session.user.id);
       } else {
@@ -47,12 +61,13 @@ export function useProfile() {
           setLoading(false);
         }
       }
-    }
+    };
 
-    checkSession();
+    init();
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log("Auth state changed:", event, session?.user?.id);
         if (!mounted) return;
         
         if (session?.user) {
