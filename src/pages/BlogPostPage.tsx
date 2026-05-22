@@ -14,17 +14,28 @@ const BlogPostPage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     
-    // Add og:url dynamically to the head to help crawlers
+    // Add og tags dynamically to the head to help crawlers
     const canonicalUrl = `https://sistemaacademia.com.br/blog/${slug}`;
-    let metaUrl = document.querySelector('meta[property="og:url"]');
-    if (!metaUrl) {
-      metaUrl = document.createElement('meta');
-      metaUrl.setAttribute('property', 'og:url');
-      document.head.appendChild(metaUrl);
-    }
-    metaUrl.setAttribute('content', canonicalUrl);
+    const title = `${post?.title} | Sistema A.C.A.D.E.M.I.A`;
+    const description = post?.excerpt || "Leia mais sobre este post no blog do Sistema A.C.A.D.E.M.I.A";
+    const imageUrl = post?.image_url || "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&auto=format&fit=crop&q=60";
 
-    // Also update canonical link
+    const updateMeta = (property: string, content: string, attr: string = 'property') => {
+      let element = document.querySelector(`meta[${attr}="${property}"]`);
+      if (!element) {
+        element = document.createElement('meta');
+        element.setAttribute(attr, property);
+        document.head.appendChild(element);
+      }
+      element.setAttribute('content', content);
+    };
+
+    updateMeta('og:url', canonicalUrl);
+    updateMeta('og:title', title);
+    updateMeta('og:description', description);
+    updateMeta('og:image', imageUrl);
+    updateMeta('description', description, 'name');
+
     let linkCanonical = document.querySelector('link[rel="canonical"]');
     if (!linkCanonical) {
       linkCanonical = document.createElement('link');
@@ -32,7 +43,7 @@ const BlogPostPage = () => {
       document.head.appendChild(linkCanonical);
     }
     linkCanonical.setAttribute('href', canonicalUrl);
-  }, [slug]);
+  }, [slug, post]);
 
   const { data: post, isLoading } = useQuery({
     queryKey: ["blog-post", slug],
@@ -171,7 +182,7 @@ const BlogPostPage = () => {
               </button>
 
               <a 
-                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://sistemaacademia.com.br/blog/${slug}`)}`}
+                href={`https://www.facebook.com/sharer.php?u=${encodeURIComponent(`https://sistemaacademia.com.br/blog/${slug}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-[#1877F2] hover:text-white text-[#1877F2] transition-colors text-sm border border-slate-100"
