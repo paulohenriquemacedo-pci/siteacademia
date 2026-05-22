@@ -40,7 +40,7 @@ const BlogPostPage = () => {
 
       // Function to force update meta tags that crawlers look for
       const updateMeta = (property: string, content: string, attr: string = 'property') => {
-        // Remove existing ones to avoid duplicates
+        // Remove existing ones to avoid duplicates (especially from index.html)
         document.querySelectorAll(`meta[${attr}="${property}"]`).forEach(el => el.remove());
         
         const element = document.createElement('meta');
@@ -53,8 +53,17 @@ const BlogPostPage = () => {
       updateMeta('og:title', title);
       updateMeta('og:description', description);
       updateMeta('og:image', imageUrl);
+      updateMeta('og:image:width', '1200');
+      updateMeta('og:image:height', '630');
       updateMeta('og:type', 'article');
+      updateMeta('og:site_name', 'Sistema A.C.A.D.E.M.I.A');
       updateMeta('description', description, 'name');
+
+      // Twitter tags as well
+      updateMeta('twitter:card', 'summary_large_image', 'name');
+      updateMeta('twitter:title', title, 'name');
+      updateMeta('twitter:description', description, 'name');
+      updateMeta('twitter:image', imageUrl, 'name');
 
       // Force canonical link
       document.querySelectorAll('link[rel="canonical"]').forEach(el => el.remove());
@@ -84,16 +93,19 @@ const BlogPostPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <Helmet>
+      <Helmet prioritizeSeoTags>
         <title>{post.title} | Sistema A.C.A.D.E.M.I.A</title>
         <meta name="description" content={post.excerpt || "Leia mais sobre este post no blog do Sistema A.C.A.D.E.M.I.A"} />
         
-        {/* Open Graph / Facebook */}
+        {/* Open Graph / Facebook - Essential for sharing */}
         <meta property="og:type" content="article" />
         <meta property="og:url" content={`https://sistemaacademia.com.br/blog/${slug}`} />
         <meta property="og:title" content={post.title} />
         <meta property="og:description" content={post.excerpt || "Leia mais sobre este post no blog do Sistema A.C.A.D.E.M.I.A"} />
         <meta property="og:image" content={imageUrl} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:site_name" content="Sistema A.C.A.D.E.M.I.A" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -101,6 +113,8 @@ const BlogPostPage = () => {
         <meta name="twitter:title" content={post.title} />
         <meta name="twitter:description" content={post.excerpt || "Leia mais sobre este post no blog do Sistema A.C.A.D.E.M.I.A"} />
         <meta name="twitter:image" content={imageUrl} />
+        
+        <link rel="canonical" href={`https://sistemaacademia.com.br/blog/${slug}`} />
       </Helmet>
       <Header />
       
