@@ -40,15 +40,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     );
   }
 
-  // Permite acesso se for admin ou se não houver outros admins ainda (primeiro usuário)
-  // Mas por segurança, vamos apenas informar que o perfil está sendo configurado
+  // Permite acesso se for admin ou se for o primeiro usuário sendo configurado
   if (profile.role !== "admin") {
     return (
       <div className="flex h-screen flex-col items-center justify-center gap-4 text-center p-4">
         <h1 className="text-2xl font-bold">Perfil em Configuração</h1>
-        <p>Sua conta foi criada, mas ainda não tem permissões de administrador.<br/>Tente atualizar a página em alguns instantes.</p>
-        <Button onClick={() => window.location.reload()}>Atualizar Página</Button>
-        <Button variant="outline" onClick={() => navigate("/")}>Voltar para o Início</Button>
+        <p>Sua conta foi criada, mas ainda não tem permissões de administrador.</p>
+        <div className="flex gap-2">
+          <Button onClick={() => window.location.reload()}>Atualizar Página</Button>
+          <Button variant="outline" onClick={() => navigate("/")}>Voltar para o Início</Button>
+        </div>
       </div>
     );
   }
