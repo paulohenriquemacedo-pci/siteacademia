@@ -1,52 +1,33 @@
+A implementação de um blog no Sistema A.C.A.D.E.M.I.A transformará o site de uma landing page estática em um portal de conteúdo, melhorando o SEO e a autoridade do método.
 
+### Estratégia de Implementação
 
-# Página Institucional — Sistema A.C.A.D.E.M.I.A. | Método PCI
+1.  **Arquitetura de Dados**:
+    *   Utilizaremos uma estrutura de dados baseada em arquivos (JSON ou Markdown) inicialmente para manter o blog veloz e fácil de gerenciar sem necessidade de um banco de dados complexo imediato.
+    *   Posteriormente, poderemos conectar ao Supabase se o volume de posts crescer muito.
 
-## Visão Geral
-Página institucional completa com tom acadêmico-profissional para o Sistema A.C.A.D.E.M.I.A., um método científico de produtividade voltado para pós-graduandos brasileiros. Design sóbrio, limpo, mobile-first, com scroll suave e animações sutis de fade-in.
+2.  **Novas Páginas**:
+    *   `/blog`: Listagem de todos os artigos com filtros por categoria (ex: Escrita, Organização, Carreira).
+    *   `/blog/:slug`: Página individual do artigo com leitura otimizada.
 
-## Design System
-- **Cores:** Navy (#1a3a5c) como primária, laranja (#ff6b35) como destaque, cinzas neutros para fundos alternados
-- **Tipografia:** Montserrat (títulos), DM Sans (corpo), Source Serif 4 (textos descritivos e citações)
-- **Espaçamento:** Container máximo 1100px, seções com 100px padding vertical (70px mobile)
-- **Comportamento:** Header fixo com blur, smooth scroll, fade-in nos cards ao rolar, menu hamburger no mobile
+3.  **Componentes de UI**:
+    *   `BlogCard`: Para a listagem.
+    *   `BlogSection`: Uma nova seção na Home (`Index.tsx`) mostrando os posts mais recentes para gerar tráfego interno.
 
-## Seções da Página (em ordem)
+4.  **SEO e Metadados**:
+    *   Configuração de JSON-LD específico para `BlogPosting` em cada artigo.
+    *   Meta tags dinâmicas para compartilhamento em redes sociais.
 
-### 1. Header / Navegação
-Header fixo com logo (quadrado navy + texto "SISTEMA A.C.A.D.E.M.I.A." com último "A" laranja), menu de navegação com 5 links e botão CTA "Conheça o livro →". Menu hamburger no mobile.
+### Próximos Passos (O que vamos precisar)
+*   **Conteúdo**: 2 ou 3 artigos iniciais para popular a área.
+*   **Imagens**: Capas para os posts (podemos usar placeholders ou gerar imagens iniciais).
+*   **Definição de Categorias**: Quais os pilares principais que o blog abordará (ex: os 8 pilares do método).
 
-### 2. Hero Institucional
-Badge "Método PCI", título principal com "pós-graduandos" destacado em laranja, subtítulo em serif, e 4 métricas-chave (8 módulos, 18 obras, 200+ pesquisadores, 6 perfis).
+---
 
-### 3. O Problema (O Cenário)
-Fundo cinza claro com 4 cards de estatísticas animados (360.648 pós-graduandos, 40% evasão em laranja, 39% depressão, 6-8 anos) com fontes acadêmicas e parágrafo contextual abaixo.
+### Detalhes Técnicos
+*   **Tecnologias**: React + React Router para navegação; Lucide React para ícones; Tailwind CSS para o layout responsivo.
+*   **SEO**: Integração com as tags já existentes no `index.html`, mas tornando-as dinâmicas por rota.
+*   **Performance**: Imagens otimizadas e carregamento progressivo.
 
-### 4. O Sistema A.C.A.D.E.M.I.A.
-Grid de 8 cards (um para cada letra do acrônimo) com borda navy no topo. Card "A — Avaliação" com destaque laranja e link para quiz. Sub-seção com os 3 pilares do método (Estrutura, Método Científico, Saúde Mental).
-
-### 5. Próximos Passos
-Seção escura (gradiente navy) com 2 cards lado a lado: Quiz Diagnóstico (botão laranja) e O Livro Completo (botão branco). Detalhes como "48 perguntas · 6 perfis · Gratuito".
-
-### 6. Base Científica
-Grid com 16 referências bibliográficas em cards pequenos + bloco de catalogação com ISBN, CIP e dados editoriais.
-
-### 7. Produtos / Ecossistema
-Grid de 6 cards de produtos (livro principal com badge "Produto Principal" e borda diferenciada, quiz gratuito, 2 ebooks, guia de IA e sprint de 14 dias).
-
-### 8. Depoimentos (Placeholder)
-Área reservada com borda tracejada e texto informando que será atualizada com depoimentos reais.
-
-### 9. Sobre / Manifesto
-Seção escura com bloco de manifesto (borda laranja à esquerda), missão da empresa e informações corporativas (Método PCI LTDA, Goiânia, 2025).
-
-### 10. Footer
-3 colunas (marca, navegação, contato) sobre fundo escuro, barra inferior com copyright, termos e privacidade.
-
-## Notas Técnicas
-- Todos os links externos usarão "#" como placeholder temporário
-- Fontes Google: Montserrat, DM Sans, Source Serif 4
-- Animações de fade-in com Intersection Observer
-- Sem backend necessário — página 100% estática/frontend
-- HTML semântico e acessível (alt texts, contraste, landmarks)
-
+**Posso prosseguir com a criação da estrutura base e do primeiro post de exemplo?**
