@@ -58,14 +58,14 @@ const BlogPostPage = () => {
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="article" />
-        <meta property="og:url" content={window.location.href} />
+        <meta property="og:url" content={`https://sistemaacademia.com.br/blog/${slug}`} />
         <meta property="og:title" content={post.title} />
         <meta property="og:description" content={post.excerpt || "Leia mais sobre este post no blog do Sistema A.C.A.D.E.M.I.A"} />
         <meta property="og:image" content={imageUrl} />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content={window.location.href} />
+        <meta name="twitter:url" content={`https://sistemaacademia.com.br/blog/${slug}`} />
         <meta name="twitter:title" content={post.title} />
         <meta name="twitter:description" content={post.excerpt || "Leia mais sobre este post no blog do Sistema A.C.A.D.E.M.I.A"} />
         <meta name="twitter:image" content={imageUrl} />
@@ -141,7 +141,7 @@ const BlogPostPage = () => {
               <span className="text-sm font-bold text-slate-900">Ações:</span>
               <button 
                 onClick={() => {
-                  navigator.clipboard.writeText(window.location.href);
+                  navigator.clipboard.writeText(`https://sistemaacademia.com.br/blog/${slug}`);
                   toast.success("Link copiado!");
                 }}
                 className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-slate-100 text-slate-500 transition-colors text-sm"
@@ -152,7 +152,7 @@ const BlogPostPage = () => {
               </button>
 
               <a 
-                href={`https://www.facebook.com/sharer.php?u=${encodeURIComponent(window.location.href)}`}
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://sistemaacademia.com.br/blog/${slug}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-[#1877F2] hover:text-white text-[#1877F2] transition-colors text-sm border border-slate-100"
@@ -163,7 +163,7 @@ const BlogPostPage = () => {
               </a>
 
               <a 
-                href={`https://api.whatsapp.com/send?text=${encodeURIComponent(post.title + " - " + window.location.href)}`}
+                href={`https://api.whatsapp.com/send?text=${encodeURIComponent(post.title + " - " + `https://sistemaacademia.com.br/blog/${slug}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-[#25D366] hover:text-white text-[#25D366] transition-colors text-sm border border-slate-100"
