@@ -40,38 +40,40 @@ serve(async (req) => {
   const canonicalUrl = `https://sistemaacademia.com.br/blog/${slug}`
 
   // Return HTML with Open Graph tags and a redirect
-  const html = `
-    <!DOCTYPE html>
-    <html lang="pt-BR">
-    <head>
-      <meta charset="UTF-8">
-      <title>${title}</title>
-      <meta name="description" content="${description}">
-      
-      <!-- Open Graph / Facebook -->
-      <meta property="og:type" content="article">
-      <meta property="og:url" content="${req.url}">
-      <meta property="og:title" content="${title}">
-      <meta property="og:description" content="${description}">
-      <meta property="og:image" content="${imageUrl}">
-      <meta property="og:image:width" content="1200">
-      <meta property="og:image:height" content="630">
-      
-      <!-- Twitter -->
-      <meta name="twitter:card" content="summary_large_image">
-      <meta name="twitter:title" content="${title}">
-      <meta name="twitter:description" content="${description}">
-      <meta name="twitter:image" content="${imageUrl}">
+  const html = `<!DOCTYPE html>
+<html lang="pt-BR" prefix="og: http://ogp.me/ns#">
+<head>
+    <meta charset="UTF-8">
+    <title>${title}</title>
+    
+    <!-- Metatags Essenciais para o Crawler -->
+    <meta name="description" content="${description}">
+    <meta property="og:title" content="${title}">
+    <meta property="og:description" content="${description}">
+    <meta property="og:image" content="${imageUrl}">
+    <meta property="og:image:secure_url" content="${imageUrl}">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="${req.url}">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Sistema A.C.A.D.E.M.I.A">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="${title}">
+    <meta name="twitter:description" content="${description}">
+    <meta name="twitter:image" content="${imageUrl}">
 
-      <!-- Redirect to actual page -->
-      <meta http-equiv="refresh" content="0;url=${canonicalUrl}">
-      <script>window.location.href = "${canonicalUrl}";</script>
-    </head>
-    <body>
-      <p>Redirecionando para <a href="${canonicalUrl}">${title}</a>...</p>
-    </body>
-    </html>
-  `
+    <script>
+        // Redirecionamento via JS (Crawlers ignoram isso e leem as tags acima)
+        window.location.href = "${canonicalUrl}";
+    </script>
+</head>
+<body>
+    Redirecionando para <a href="${canonicalUrl}">${title}</a>...
+</body>
+</html>`
 
   return new Response(html, {
     headers: { ...corsHeaders, 'Content-Type': 'text/html; charset=utf-8' },
