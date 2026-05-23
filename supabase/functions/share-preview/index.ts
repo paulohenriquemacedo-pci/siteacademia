@@ -44,7 +44,10 @@ serve(async (req) => {
   }
 
   const canonicalUrl = `https://sistemaacademia.com.br/blog/${slug}`
-  const shareUrl = canonicalUrl
+  // Para garantir que o Facebook use as meta tags DESTA função, 
+  // o og:url deve ser o link desta própria função.
+  const shareUrl = req.url 
+
 
   const html = `<!DOCTYPE html>
 <html lang="pt-BR">
@@ -64,6 +67,7 @@ serve(async (req) => {
     <meta property="og:url" content="${shareUrl}">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Sistema A.C.A.D.E.M.I.A">
+    <meta property="og:image:alt" content="${title}">
     
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="${title}">
@@ -79,13 +83,10 @@ serve(async (req) => {
 </body>
 </html>`
 
-  const encoder = new TextEncoder()
-  const encodedHtml = encoder.encode(html)
-
-  return new Response(encodedHtml, {
+  return new Response(html, {
     headers: { 
-      ...corsHeaders, 
       'Content-Type': 'text/html; charset=utf-8',
+      ...corsHeaders,
     },
     status: 200,
   })
