@@ -35,8 +35,6 @@ serve(async (req) => {
   const title = post.title + ' | Sistema A.C.A.D.E.M.I.A'
   const description = post.excerpt || "Leia mais sobre este post no blog do Sistema A.C.A.D.E.M.I.A"
   const imageUrl = post.image_url || "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&auto=format&fit=crop&q=60"
-
-
   const canonicalUrl = `https://sistemaacademia.com.br/blog/${slug}`
   const shareUrl = `https://douhwqlpfgwuqwturdjw.supabase.co/functions/v1/share-preview?slug=${slug}`
 
@@ -50,10 +48,6 @@ serve(async (req) => {
     <meta property="og:title" content="${title}">
     <meta property="og:description" content="${description}">
     <meta property="og:image" content="${imageUrl}">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:type" content="image/png">
-
     <meta property="og:url" content="${shareUrl}">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Sistema A.C.A.D.E.M.I.A">
@@ -72,7 +66,10 @@ serve(async (req) => {
 </body>
 </html>`
 
-  return new Response(html, {
+  const encoder = new TextEncoder()
+  const encodedHtml = encoder.encode(html)
+
+  return new Response(encodedHtml, {
     headers: { 
       ...corsHeaders, 
       'Content-Type': 'text/html; charset=utf-8',
