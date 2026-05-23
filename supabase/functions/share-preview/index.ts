@@ -53,6 +53,7 @@ serve(async (req) => {
     <title>${title}</title>
     <meta name="description" content="${description}">
     
+    <meta property="fb:app_id" content="966242223397117">
     <meta property="og:title" content="${title}">
     <meta property="og:description" content="${description}">
     <meta property="og:image" content="${imageUrl}">
