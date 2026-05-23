@@ -44,9 +44,9 @@ serve(async (req) => {
   }
 
   const canonicalUrl = `https://sistemaacademia.com.br/blog/${slug}`
-  // Para garantir que o Facebook use as meta tags DESTA função, 
-  // o og:url deve ser o link desta própria função.
-  const shareUrl = req.url 
+  // Para que o Facebook valide as tags desta função, og:url deve ser o link de compartilhamento
+  const shareUrl = `https://douhwqlpfgwuqwturdjw.supabase.co/functions/v1/share-preview?slug=${slug}`
+
 
 
   const html = `<!DOCTYPE html>
