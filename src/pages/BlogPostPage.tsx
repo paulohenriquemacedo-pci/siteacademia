@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { logPageView } from "@/lib/analytics";
 
 const BlogPostPage = () => {
   const { slug } = useParams();
@@ -31,6 +32,7 @@ const BlogPostPage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    logPageView();
     
     if (post) {
       const canonicalUrl = `https://sistemaacademia.com.br/blog/${slug}`;
