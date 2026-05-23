@@ -30,8 +30,9 @@ serve(async (req) => {
     .single()
 
   if (error || !post) {
-    console.error('Error fetching post:', error)
-    return new Response('Post not found', { status: 404 })
+    console.error(`Error fetching post with slug [${slug}]:`, error)
+    // Fallback instead of 404 to see what's happening
+    return new Response(`Post [${slug}] not found.`, { status: 404 })
   }
 
   const title = `${post.title} | Sistema A.C.A.D.E.M.I.A`
