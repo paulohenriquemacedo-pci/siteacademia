@@ -44,7 +44,7 @@ serve(async (req) => {
   }
 
   const canonicalUrl = `https://sistemaacademia.com.br/blog/${slug}`
-  const shareUrl = canonicalUrl
+  const shareUrl = `https://douhwqlpfgwuqwturdjw.supabase.co/functions/v1/share-preview?slug=${slug}`
 
   const html = `<!DOCTYPE html>
 <html lang="pt-BR">
