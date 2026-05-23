@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,6 +18,7 @@ export default function Auth() {
   const [loading, setLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +32,9 @@ export default function Auth() {
         });
         if (error) throw error;
         toast.success("Login realizado com sucesso!");
-        window.location.href = "/admin"; // Forçar recarregamento para garantir estado limpo
+        // Limpar qualquer cache do QueryClient se existir
+        queryClient.clear();
+        navigate("/admin");
       } else {
         const { error } = await supabase.auth.signUp({
           email,
