@@ -199,7 +199,7 @@ const BlogPostPage = () => {
               </button>
 
               <a 
-                href={`https://www.facebook.com/sharer.php?u=${encodeURIComponent(`https://sistemaacademia.com.br/blog/${slug}`)}&src=sdkpreparse`}
+                href={`https://www.facebook.com/sharer.php?u=${encodeURIComponent(`https://douhwqlpfgwuqwturdjw.supabase.co/functions/v1/share-preview?slug=${slug}`)}&src=sdkpreparse`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-[#1877F2] hover:text-white text-[#1877F2] transition-colors text-sm border border-slate-100"
