@@ -50,7 +50,7 @@ serve(async (req) => {
       
       <!-- Open Graph / Facebook -->
       <meta property="og:type" content="article">
-      <meta property="og:url" content="${canonicalUrl}">
+      <meta property="og:url" content="${req.url}">
       <meta property="og:title" content="${title}">
       <meta property="og:description" content="${description}">
       <meta property="og:image" content="${imageUrl}">
