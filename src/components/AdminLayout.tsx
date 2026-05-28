@@ -40,7 +40,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     );
   }
 
-  if (!profile) {
+  if (!profile && !loading) {
     return (
       <div className="flex h-screen flex-col items-center justify-center gap-4 bg-gray-50">
         <div className="bg-white p-8 rounded-xl shadow-lg text-center max-w-md w-full mx-4">
@@ -52,6 +52,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </div>
     );
   }
+
+  // Fallback para caso profile seja nulo mas ainda estejamos tentando renderizar
+  if (!profile) return null;
 
   // Removida restrição estrita de admin para facilitar o acesso inicial
   // No futuro, você pode reativar isso se tiver múltiplos usuários.
