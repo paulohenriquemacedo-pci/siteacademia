@@ -21,34 +21,30 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const fetchProfile = async (userId: string) => {
-    if (!userId) return;
+    if (!userId) {
+      setLoading(false);
+      return;
+    }
     
     try {
-      console.log("Fetching profile for:", userId);
+      console.log("[ProfileContext] Fetching profile for:", userId);
       
-      // Timeout de 3s para evitar travamento infinito no carregamento do perfil
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3000);
-
       const { data, error } = await supabase
         .from("profiles")
         .select("*")
         .eq("id", userId)
         .maybeSingle();
       
-      clearTimeout(timeoutId);
-
       if (error) {
-        console.error("Error fetching profile:", error);
-        setProfile({ id: userId, full_name: "Admin", role: "admin", avatar_url: null });
+        console.error("[ProfileContext] Error fetching profile:", error);
+        setProfile({ id: userId, full_name: "Admin User", role: "admin", avatar_url: null });
       } else if (data) {
         setProfile(data);
       } else {
-        // Fallback: Se logado mas sem perfil no DB, assume admin para não bloquear
         setProfile({ id: userId, full_name: "Admin", role: "admin", avatar_url: null });
       }
     } catch (err) {
-      console.error("Unexpected error in fetchProfile:", err);
+      console.error("[ProfileContext] Unexpected error in fetchProfile:", err);
       setProfile({ id: userId, full_name: "Admin", role: "admin", avatar_url: null });
     } finally {
       setLoading(false);
@@ -68,53 +64,54 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let mounted = true;
+    let authInitialized = false;
 
-    const initAuth = async () => {
+    const handleAuthChange = async (session: any) => {
+      if (!mounted) return;
+      
       try {
-        // Verificação imediata da sessão local
-        const { data: { session } } = await supabase.auth.getSession();
-        
-        if (!mounted) return;
-
         if (session?.user) {
+          console.log("[ProfileContext] User detected:", session.user.id);
           await fetchProfile(session.user.id);
         } else {
-          // Se não há sessão local imediata, não esperamos
+          console.log("[ProfileContext] No user session");
+          setProfile(null);
           setLoading(false);
         }
       } catch (err) {
-        console.error("Auth init error:", err);
-        if (mounted) setLoading(false);
+        console.error("[ProfileContext] Error in handleAuthChange:", err);
+        setLoading(false);
+      } finally {
+        authInitialized = true;
       }
     };
 
-    initAuth();
-
-    // Listener para mudanças de estado (login/logout/refresh)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (!mounted) return;
-      
-      console.log("Auth event:", event);
-      
-      if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
-        if (session?.user) {
-          await fetchProfile(session.user.id);
-        }
-      } else if (event === "SIGNED_OUT") {
-        setProfile(null);
-        setLoading(false);
-      } else if (event === "INITIAL_SESSION") {
-        if (session?.user) {
-          await fetchProfile(session.user.id);
-        } else {
-          setLoading(false);
-        }
+    // Check initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!authInitialized) {
+        handleAuthChange(session);
       }
     });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log("[ProfileContext] Auth event:", event);
+      // We always process events to stay in sync
+      handleAuthChange(session);
+    });
+
+    // Safety timeout - force stop loading if still active after 5 seconds
+    const safetyTimer = setTimeout(() => {
+      if (mounted && loading) {
+        console.warn("[ProfileContext] Safety timeout hit, forcing loading to false");
+        setLoading(false);
+      }
+    }, 5000);
 
     return () => {
       mounted = false;
       subscription.unsubscribe();
+      clearTimeout(safetyTimer);
     };
   }, []);
 
