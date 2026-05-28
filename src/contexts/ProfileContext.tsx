@@ -27,6 +27,7 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
     }
     
     try {
+      setLoading(true);
       console.log("[ProfileContext] Fetching profile for:", userId);
       
       const { data, error } = await supabase
