@@ -10,6 +10,7 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
 import { Image as ImageIcon, Loader2 } from "lucide-react";
+import { AdminErrorFallback } from "@/components/AdminErrorFallback";
 
 export default function AdminPostEditor() {
   const { id } = useParams();
@@ -18,6 +19,7 @@ export default function AdminPostEditor() {
 
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(isEditing);
+  const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -39,19 +41,27 @@ export default function AdminPostEditor() {
   }, [id]);
 
   const fetchPost = async () => {
-    const { data, error } = await supabase
-      .from("posts")
-      .select("*")
-      .eq("id", id)
-      .single();
+    try {
+      setFetching(true);
+      setError(null);
+      const { data, error: fetchError } = await supabase
+        .from("posts")
+        .select("*")
+        .eq("id", id)
+        .single();
 
-    if (error) {
+      if (fetchError) {
+        throw fetchError;
+      } else {
+        setFormData(data);
+      }
+    } catch (err: any) {
+      console.error("Error fetching post:", err);
+      setError(err.message || "Erro ao carregar os detalhes do post.");
       toast.error("Erro ao carregar post");
-      navigate("/admin");
-    } else {
-      setFormData(data);
+    } finally {
+      setFetching(false);
     }
-    setFetching(false);
   };
 
   const handleSlugify = (title: string) => {
@@ -157,6 +167,21 @@ export default function AdminPostEditor() {
       <div className="flex flex-col items-center justify-center py-20 gap-4">
         <Loader2 className="h-8 w-8 animate-spin text-academy-600" />
         <p className="text-gray-500">Carregando dados do post...</p>
+      </div>
+    </AdminLayout>
+  );
+
+  if (error) return (
+    <AdminLayout>
+      <AdminErrorFallback 
+        error={error} 
+        resetErrorBoundary={fetchPost} 
+        title="Erro no Editor" 
+      />
+      <div className="mt-4 flex justify-center">
+        <Button variant="outline" onClick={() => navigate("/admin")}>
+          Voltar para Lista
+        </Button>
       </div>
     </AdminLayout>
   );
