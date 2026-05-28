@@ -79,25 +79,39 @@ export default function AdminPostEditor() {
     if (!file) return;
 
     setUploading(true);
+    
+    // Generate a unique filename using timestamp and a random part
+    const timestamp = Date.now();
+    const randomPart = Math.random().toString(36).substring(2, 10);
     const fileExt = file.name.split(".").pop();
-    const fileName = `${Math.random()}.${fileExt}`;
+    const fileName = `${timestamp}-${randomPart}.${fileExt}`;
     const filePath = `post-images/${fileName}`;
 
     try {
-      const { error: uploadError } = await supabase.storage
+      console.log("Iniciando upload para:", filePath);
+      const { data, error: uploadError } = await supabase.storage
         .from("blog-images")
-        .upload(filePath, file);
+        .upload(filePath, file, {
+          cacheControl: "3600",
+          upsert: false
+        });
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error("Erro no upload do Supabase:", uploadError);
+        throw uploadError;
+      }
 
+      console.log("Upload concluído, obtendo URL pública...");
       const { data: { publicUrl } } = supabase.storage
         .from("blog-images")
         .getPublicUrl(filePath);
 
+      console.log("URL pública obtida:", publicUrl);
       setFormData(prev => ({ ...prev, image_url: publicUrl }));
       toast.success("Imagem enviada com sucesso!");
     } catch (error: any) {
-      toast.error("Erro no upload: " + error.message);
+      console.error("Erro capturado no handleImageUpload:", error);
+      toast.error("Erro no upload: " + (error.message || "Verifique sua conexão ou se você tem permissão."));
     } finally {
       setUploading(false);
     }
