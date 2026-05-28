@@ -32,13 +32,14 @@ export default function Auth() {
         });
         if (error) throw error;
         toast.success("Login realizado com sucesso!");
-        // Limpar cache e forçar recarregamento para garantir novo estado de sessão
+        
+        // Limpar caches locais e estados residuais
         queryClient.clear();
-        window.localStorage.removeItem('sb-douhwqlpfgwuqwturdjw-auth-token'); 
-        queryClient.removeQueries(); // Remove todos os dados do cache de query
+        
+        // Pequeno atraso para o Supabase processar o novo estado da sessão localmente
         setTimeout(() => {
-          window.location.replace("/admin"); // Use replace para evitar voltar para a tela de login pelo botão voltar
-        }, 100);
+          navigate("/admin", { replace: true });
+        }, 300);
       } else {
         const { error } = await supabase.auth.signUp({
           email,
