@@ -32,9 +32,11 @@ export default function Auth() {
         });
         if (error) throw error;
         toast.success("Login realizado com sucesso!");
-        // Limpar qualquer cache do QueryClient se existir
+        // Limpar cache e forçar recarregamento para garantir novo estado de sessão
         queryClient.clear();
-        navigate("/admin");
+        setTimeout(() => {
+          window.location.href = "/admin";
+        }, 100);
       } else {
         const { error } = await supabase.auth.signUp({
           email,
