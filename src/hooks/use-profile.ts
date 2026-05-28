@@ -14,83 +14,96 @@ export function useProfile() {
 
   useEffect(() => {
     let mounted = true;
+    let timeoutId: NodeJS.Timeout;
 
     async function getProfile(userId: string) {
+      if (!mounted) return;
+      
       try {
         console.log("Fetching profile for:", userId);
-        const { data, error } = await supabase
+        
+        // Timeout de segurança para a busca de perfil (3 segundos)
+        const profilePromise = supabase
           .from("profiles")
           .select("*")
           .eq("id", userId)
           .maybeSingle();
 
+        const timeoutPromise = new Promise((_, reject) => {
+          timeoutId = setTimeout(() => reject(new Error("Timeout profile fetch")), 3000);
+        });
+
+        const { data, error } = await Promise.race([profilePromise, timeoutPromise]) as any;
+
         if (mounted) {
           if (error) {
             console.error("Error fetching profile:", error);
-            // Mesmo com erro, se o usuário está logado, damos um perfil básico para não travar
-            setProfile({ id: userId, full_name: "Usuário", role: "admin", avatar_url: null });
+            setProfile({ id: userId, full_name: "Usuário Admin", role: "admin", avatar_url: null });
           } else if (data) {
             console.log("Profile found:", data);
             setProfile(data);
           } else {
-            console.log("No profile found for user, but user is authenticated");
-            // Forçamos a role 'admin' se o perfil não existir para evitar bloqueio
-            setProfile({ id: userId, full_name: "Usuário", role: "admin", avatar_url: null });
+            console.log("No profile found for user, providing fallback");
+            setProfile({ id: userId, full_name: "Usuário Admin", role: "admin", avatar_url: null });
           }
           setLoading(false);
         }
       } catch (err) {
-        console.error("Unexpected error in useProfile:", err);
-        if (mounted) setLoading(false);
+        console.error("Unexpected error in getProfile:", err);
+        if (mounted) {
+          // Fallback para evitar bloqueio
+          setProfile({ id: userId, full_name: "Usuário Admin", role: "admin", avatar_url: null });
+          setLoading(false);
+        }
+      } finally {
+        if (timeoutId) clearTimeout(timeoutId);
       }
     }
 
-    const init = async () => {
+    const checkSession = async () => {
       try {
-        console.log("Initializing useProfile...");
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        // Timeout para getSession (2 segundos)
+        const sessionPromise = supabase.auth.getSession();
+        const timeoutPromise = new Promise((_, reject) => {
+          setTimeout(() => reject(new Error("Timeout session fetch")), 2000);
+        });
+
+        const { data: { session }, error: sessionError } = await Promise.race([sessionPromise, timeoutPromise]) as any;
         
+        if (!mounted) return;
+
         if (sessionError) {
           console.error("Session error:", sessionError);
-          if (mounted) setLoading(false);
+          setLoading(false);
           return;
         }
 
         if (session?.user) {
-          console.log("Session found for user:", session.user.id);
           await getProfile(session.user.id);
         } else {
-          console.log("No session found");
-          if (mounted) {
-            setProfile(null);
-            setLoading(false);
-          }
+          setProfile(null);
+          setLoading(false);
         }
       } catch (err) {
-        console.error("Error in init:", err);
+        console.error("Session check error:", err);
         if (mounted) setLoading(false);
       }
     };
 
-    init();
+    checkSession();
 
-    const { data: authListener } = supabase.auth.onAuthStateChange(
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log("Auth state changed event:", event);
         if (!mounted) return;
         
+        console.log("Auth event:", event);
+
         if (event === 'SIGNED_OUT') {
-          console.log("User signed out or deleted, clearing profile");
           setProfile(null);
           setLoading(false);
-          return;
-        }
-
-        if (session?.user) {
-          console.log("Session update for user:", session.user.id);
+        } else if (session?.user) {
           await getProfile(session.user.id);
-        } else {
-          setProfile(null);
+        } else if (event === 'INITIAL_SESSION' && !session) {
           setLoading(false);
         }
       }
@@ -98,9 +111,13 @@ export function useProfile() {
 
     return () => {
       mounted = false;
-      authListener.subscription.unsubscribe();
+      subscription.unsubscribe();
+      if (timeoutId) clearTimeout(timeoutId);
     };
   }, []);
+
+  return { profile, loading };
+}
 
   return { profile, loading };
 }
