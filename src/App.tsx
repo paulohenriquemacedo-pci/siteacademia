@@ -15,6 +15,7 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 import { initGA, logPageView } from "./lib/analytics";
 import { useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,17 @@ const AppContent = () => {
 
   useEffect(() => {
     initGA();
+    
+    // Configurar listener global de auth para tratar transições de sessão
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log(`Global Auth Event: ${event}`);
+      if (event === 'SIGNED_OUT') {
+        // Limpeza adicional se necessário ao deslogar
+        queryClient.clear();
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   useEffect(() => {

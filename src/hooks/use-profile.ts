@@ -76,10 +76,18 @@ export function useProfile() {
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log("Auth state changed:", event, session?.user?.id);
+        console.log("Auth state changed event:", event);
         if (!mounted) return;
         
+        if (event === 'SIGNED_OUT') {
+          console.log("User signed out or deleted, clearing profile");
+          setProfile(null);
+          setLoading(false);
+          return;
+        }
+
         if (session?.user) {
+          console.log("Session update for user:", session.user.id);
           await getProfile(session.user.id);
         } else {
           setProfile(null);
