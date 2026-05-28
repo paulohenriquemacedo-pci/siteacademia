@@ -11,6 +11,7 @@ import BlogPostPage from "./pages/BlogPostPage";
 import Auth from "./pages/Auth";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminPostEditor from "./pages/AdminPostEditor";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 import { initGA, logPageView } from "./lib/analytics";
 import { useEffect } from "react";
@@ -34,9 +35,9 @@ const AppContent = () => {
       <Route path="/blog" element={<BlogIndex />} />
       <Route path="/blog/:slug" element={<BlogPostPage />} />
       <Route path="/auth" element={<Auth />} />
-      <Route path="/admin" element={<AdminDashboard />} />
-      <Route path="/admin/posts/new" element={<AdminPostEditor />} />
-      <Route path="/admin/posts/edit/:id" element={<AdminPostEditor />} />
+      <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+      <Route path="/admin/posts/new" element={<ProtectedRoute><AdminPostEditor /></ProtectedRoute>} />
+      <Route path="/admin/posts/edit/:id" element={<ProtectedRoute><AdminPostEditor /></ProtectedRoute>} />
       <Route path="/termos" element={<Termos />} />
       <Route path="/privacidade" element={<Privacidade />} />
       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

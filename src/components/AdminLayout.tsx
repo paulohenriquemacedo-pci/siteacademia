@@ -23,38 +23,28 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
-    console.log("AdminLayout State:", { profile, loading });
-  }, [profile, loading]);
+    console.log("AdminLayout rendering with profile:", profile?.id);
+  }, [profile]);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    window.location.href = "/";
+    try {
+      await supabase.auth.signOut();
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Logout error:", error);
+      window.location.href = "/";
+    }
   };
 
-  if (loading) {
+  // Se não houver profile, o ProtectedRoute já deve ter redirecionado, 
+  // mas mantemos um fallback seguro aqui para não quebrar o render.
+  if (!profile) {
     return (
-      <div className="flex h-screen flex-col items-center justify-center gap-4">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-academy-600 border-t-transparent"></div>
-        <p className="text-gray-500 animate-pulse">Carregando painel...</p>
+      <div className="flex h-screen items-center justify-center">
+        <Button onClick={() => navigate("/auth")}>Ir para Login</Button>
       </div>
     );
   }
-
-  if (!profile && !loading) {
-    return (
-      <div className="flex h-screen flex-col items-center justify-center gap-4 bg-gray-50">
-        <div className="bg-white p-8 rounded-xl shadow-lg text-center max-w-md w-full mx-4">
-          <X className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Acesso Negado</h1>
-          <p className="text-gray-600 mb-6">Você precisa estar logado para acessar esta área.</p>
-          <Button className="w-full" onClick={() => navigate("/auth")}>Ir para Login</Button>
-        </div>
-      </div>
-    );
-  }
-
-  // Fallback para caso profile seja nulo mas ainda estejamos tentando renderizar
-  if (!profile) return null;
 
   // Removida restrição estrita de admin para facilitar o acesso inicial
   // No futuro, você pode reativar isso se tiver múltiplos usuários.

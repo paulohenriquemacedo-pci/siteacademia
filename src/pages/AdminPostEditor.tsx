@@ -138,7 +138,14 @@ export default function AdminPostEditor() {
     }
   };
 
-  if (fetching) return <AdminLayout>Carregando...</AdminLayout>;
+  if (fetching) return (
+    <AdminLayout>
+      <div className="flex flex-col items-center justify-center py-20 gap-4">
+        <Loader2 className="h-8 w-8 animate-spin text-academy-600" />
+        <p className="text-gray-500">Carregando dados do post...</p>
+      </div>
+    </AdminLayout>
+  );
 
   return (
     <AdminLayout>

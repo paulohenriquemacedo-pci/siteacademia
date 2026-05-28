@@ -1,33 +1,15 @@
-A implementação de um blog no Sistema A.C.A.D.E.M.I.A transformará o site de uma landing page estática em um portal de conteúdo, melhorando o SEO e a autoridade do método.
+O painel administrativo está travando devido a uma lógica de proteção de rotas muito sensível ao tempo de carregamento da sessão no `AdminLayout` e no `useProfile`. Vou reconstruir a estrutura do painel para usar um roteamento mais robusto e nativo do React Router, separando a verificação de autenticação da renderização dos componentes principais.
 
-### Estratégia de Implementação
+### Mudanças Propostas
 
-1.  **Arquitetura de Dados**:
-    *   Utilizaremos uma estrutura de dados baseada em arquivos (JSON ou Markdown) inicialmente para manter o blog veloz e fácil de gerenciar sem necessidade de um banco de dados complexo imediato.
-    *   Posteriormente, poderemos conectar ao Supabase se o volume de posts crescer muito.
-
-2.  **Novas Páginas**:
-    *   `/blog`: Listagem de todos os artigos com filtros por categoria (ex: Escrita, Organização, Carreira).
-    *   `/blog/:slug`: Página individual do artigo com leitura otimizada.
-
-3.  **Componentes de UI**:
-    *   `BlogCard`: Para a listagem.
-    *   `BlogSection`: Uma nova seção na Home (`Index.tsx`) mostrando os posts mais recentes para gerar tráfego interno.
-
-4.  **SEO e Metadados**:
-    *   Configuração de JSON-LD específico para `BlogPosting` em cada artigo.
-    *   Meta tags dinâmicas para compartilhamento em redes sociais.
-
-### Próximos Passos (O que vamos precisar)
-*   **Conteúdo**: 2 ou 3 artigos iniciais para popular a área.
-*   **Imagens**: Capas para os posts (podemos usar placeholders ou gerar imagens iniciais).
-*   **Definição de Categorias**: Quais os pilares principais que o blog abordará (ex: os 8 pilares do método).
-
----
+1. **Novo Componente ProtectedRoute**: Criar um componente dedicado apenas para validar se o usuário está logado antes de tentar renderizar qualquer parte do painel.
+2. **Refatoração do AdminLayout**: Simplificar o layout para que ele não bloqueie a renderização com telas de carregamento infinitas. Ele apenas fornecerá a moldura (sidebar) para o conteúdo.
+3. **Refatoração do useProfile**: Melhorar a resiliência do hook para retornar estados claros de "não autenticado" ou "carregando" sem causar loops de re-renderização.
+4. **Atualização do App.tsx**: Implementar o `ProtectedRoute` no roteamento central para que o acesso seja verificado antes mesmo do componente da página ser montado.
 
 ### Detalhes Técnicos
-*   **Tecnologias**: React + React Router para navegação; Lucide React para ícones; Tailwind CSS para o layout responsivo.
-*   **SEO**: Integração com as tags já existentes no `index.html`, mas tornando-as dinâmicas por rota.
-*   **Performance**: Imagens otimizadas e carregamento progressivo.
 
-**Posso prosseguir com a criação da estrutura base e do primeiro post de exemplo?**
+- **src/components/ProtectedRoute.tsx**: Novo componente que envolve rotas administrativas. Se não houver sessão, redireciona para `/auth`.
+- **src/App.tsx**: Ajustar as rotas `/admin/*` para usarem o novo `ProtectedRoute`.
+- **src/components/AdminLayout.tsx**: Remover as telas de bloqueio internas; o layout passará a assumir que, se está sendo renderizado, o acesso já foi validado pelo roteador.
+- **src/pages/AdminPostEditor.tsx**: Adicionar logs e verificações extras para garantir que a transição entre listagem e editor não cause travamentos.
