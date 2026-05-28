@@ -1,11 +1,6 @@
-import { useEffect, useState } from "react";
-import AdminLayout from "@/components/AdminLayout";
-import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
-import { Edit, Trash2, Eye, Plus } from "lucide-react";
-import { toast } from "sonner";
 import { AdminErrorFallback } from "@/components/AdminErrorFallback";
+import AdminLayout from "@/components/AdminLayout";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -14,49 +9,45 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Edit, Eye, Plus, Trash2, Loader2 } from "lucide-react";
+import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function AdminDashboard() {
-  const [posts, setPosts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
 
-  const fetchPosts = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const { data, error: fetchError } = await supabase
+  const { data: posts = [], isLoading, error, refetch } = useQuery({
+    queryKey: ["admin-posts"],
+    queryFn: async () => {
+      const { data, error } = await supabase
         .from("posts")
         .select("*")
         .order("created_at", { ascending: false });
 
-      if (fetchError) {
-        throw fetchError;
-      } else {
-        setPosts(data || []);
-      }
-    } catch (err: any) {
-      console.error("Error fetching posts:", err);
-      setError(err.message || "Erro ao carregar a lista de posts.");
-      toast.error("Erro ao carregar posts");
-    } finally {
-      setLoading(false);
-    }
-  };
+      if (error) throw error;
+      return data || [];
+    },
+  });
 
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
-  const handleDelete = async (id: string) => {
-    if (!confirm("Tem certeza que deseja excluir este post?")) return;
-
-    const { error } = await supabase.from("posts").delete().eq("id", id);
-
-    if (error) {
-      toast.error("Erro ao excluir post");
-    } else {
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("posts").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
       toast.success("Post excluído com sucesso");
-      fetchPosts();
+      queryClient.invalidateQueries({ queryKey: ["admin-posts"] });
+    },
+    onError: (err: any) => {
+      toast.error("Erro ao excluir post: " + err.message);
+    },
+  });
+
+  const handleDelete = (id: string) => {
+    if (confirm("Tem certeza que deseja excluir este post?")) {
+      deleteMutation.mutate(id);
     }
   };
 
@@ -74,11 +65,11 @@ export default function AdminDashboard() {
         </Button>
       </div>
 
-      <div className="bg-white rounded-lg shadow border">
+      <div className="bg-white rounded-lg shadow border overflow-hidden">
         {error ? (
           <AdminErrorFallback 
-            error={error} 
-            resetErrorBoundary={fetchPosts} 
+            error={(error as Error).message} 
+            resetErrorBoundary={() => refetch()} 
             title="Erro na Listagem" 
           />
         ) : (
@@ -93,16 +84,23 @@ export default function AdminDashboard() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {loading ? (
+              {isLoading ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-8">Carregando...</TableCell>
+                  <TableCell colSpan={5} className="text-center py-12">
+                    <div className="flex flex-col items-center gap-2">
+                      <Loader2 className="h-8 w-8 animate-spin text-academy-600" />
+                      <span className="text-gray-500">Carregando posts...</span>
+                    </div>
+                  </TableCell>
                 </TableRow>
               ) : posts.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-8 text-gray-500">Nenhum post encontrado.</TableCell>
+                  <TableCell colSpan={5} className="text-center py-8 text-gray-500">
+                    Nenhum post encontrado.
+                  </TableCell>
                 </TableRow>
               ) : (
-                posts.map((post) => (
+                posts.map((post: any) => (
                   <TableRow key={post.id}>
                     <TableCell className="font-medium">{post.title}</TableCell>
                     <TableCell>{post.category}</TableCell>
@@ -126,7 +124,13 @@ export default function AdminDashboard() {
                             <Edit className="h-4 w-4" />
                           </Link>
                         </Button>
-                        <Button variant="ghost" size="icon" className="text-red-600 hover:text-red-700" onClick={() => handleDelete(post.id)}>
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="text-red-600 hover:text-red-700" 
+                          onClick={() => handleDelete(post.id)}
+                          disabled={deleteMutation.isPending}
+                        >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
