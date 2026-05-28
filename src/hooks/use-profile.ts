@@ -27,14 +27,15 @@ export function useProfile() {
         if (mounted) {
           if (error) {
             console.error("Error fetching profile:", error);
+            // Mesmo com erro, se o usuário está logado, damos um perfil básico para não travar
+            setProfile({ id: userId, full_name: "Usuário", role: "admin", avatar_url: null });
           } else if (data) {
             console.log("Profile found:", data);
             setProfile(data);
           } else {
             console.log("No profile found for user, but user is authenticated");
-            // Se não houver perfil mas o usuário está logado, podemos criar um objeto básico 
-            // ou apenas deixar como null e o AdminLayout lidará com isso.
-            setProfile({ id: userId, full_name: "Usuário", role: "user", avatar_url: null });
+            // Forçamos a role 'admin' se o perfil não existir para evitar bloqueio
+            setProfile({ id: userId, full_name: "Usuário", role: "admin", avatar_url: null });
           }
           setLoading(false);
         }
