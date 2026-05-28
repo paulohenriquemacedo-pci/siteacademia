@@ -79,7 +79,7 @@ export function useProfile() {
         console.log("Auth state changed event:", event);
         if (!mounted) return;
         
-        if (event === 'SIGNED_OUT' || event === 'USER_DELETED') {
+        if (event === 'SIGNED_OUT') {
           console.log("User signed out or deleted, clearing profile");
           setProfile(null);
           setLoading(false);
