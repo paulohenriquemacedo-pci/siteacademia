@@ -310,8 +310,8 @@ export default function AdminPostEditor() {
                 )}
               </div>
 
-              <Button type="submit" className="w-full" disabled={loading}>
-                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              <Button type="submit" className="w-full" disabled={saveMutation.isPending}>
+                {saveMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {isEditing ? "Atualizar Post" : "Criar Post"}
               </Button>
               <Button type="button" variant="outline" className="w-full" onClick={() => navigate("/admin")}>
