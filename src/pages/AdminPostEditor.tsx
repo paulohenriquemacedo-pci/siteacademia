@@ -155,8 +155,8 @@ export default function AdminPostEditor() {
   if (error) return (
     <AdminLayout>
       <AdminErrorFallback 
-        error={error} 
-        resetErrorBoundary={fetchPost} 
+        error={(error as Error).message} 
+        resetErrorBoundary={() => queryClient.invalidateQueries({ queryKey: ["post", id] })} 
         title="Erro no Editor" 
       />
       <div className="mt-4 flex justify-center">
