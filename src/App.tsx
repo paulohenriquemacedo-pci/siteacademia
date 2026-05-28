@@ -15,26 +15,22 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 import { initGA, logPageView } from "./lib/analytics";
 import { useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { ProfileProvider } from "./contexts/ProfileContext";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const AppContent = () => {
   const location = useLocation();
 
   useEffect(() => {
     initGA();
-    
-    // Configurar listener global de auth para tratar transições de sessão
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log(`Global Auth Event: ${event}`);
-      if (event === 'SIGNED_OUT') {
-        // Limpeza adicional se necessário ao deslogar
-        queryClient.clear();
-      }
-    });
-
-    return () => subscription.unsubscribe();
   }, []);
 
   useEffect(() => {
@@ -52,7 +48,6 @@ const AppContent = () => {
       <Route path="/admin/posts/edit/:id" element={<ProtectedRoute><AdminPostEditor /></ProtectedRoute>} />
       <Route path="/termos" element={<Termos />} />
       <Route path="/privacidade" element={<Privacidade />} />
-      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
@@ -60,13 +55,15 @@ const AppContent = () => {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <AppContent />
-      </BrowserRouter>
-    </TooltipProvider>
+    <ProfileProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <AppContent />
+        </BrowserRouter>
+      </TooltipProvider>
+    </ProfileProvider>
   </QueryClientProvider>
 );
 
