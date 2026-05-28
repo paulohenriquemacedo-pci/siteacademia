@@ -102,7 +102,7 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
 
     // Safety timeout - force stop loading if still active after 5 seconds
     const safetyTimer = setTimeout(() => {
-      if (mounted && !authInitialized) {
+      if (mounted && loading) {
         console.warn("[ProfileContext] Safety timeout hit, forcing loading to false");
         setLoading(false);
       }
