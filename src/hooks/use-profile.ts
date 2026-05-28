@@ -118,6 +118,3 @@ export function useProfile() {
 
   return { profile, loading };
 }
-
-  return { profile, loading };
-}
