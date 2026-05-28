@@ -47,7 +47,7 @@ const BlogCard = ({ post }: BlogCardProps) => {
         </div>
         
         <Link to={`/blog/${post.slug}`}>
-          <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-academy-600 transition-colors line-clamp-2">
+          <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-academy-600 transition-colors">
             {post.title}
           </h3>
         </Link>
