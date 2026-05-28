@@ -1,27 +1,25 @@
-import { useEffect, useState } from "react";
 import AdminLayout from "@/components/AdminLayout";
-import { supabase } from "@/integrations/supabase/client";
-import { useNavigate, useParams } from "react-router-dom";
+import { AdminErrorFallback } from "@/components/AdminErrorFallback";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { toast } from "sonner";
-import { Card, CardContent } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Image as ImageIcon, Loader2 } from "lucide-react";
-import { AdminErrorFallback } from "@/components/AdminErrorFallback";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function AdminPostEditor() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const isEditing = !!id;
 
-  const [loading, setLoading] = useState(false);
-  const [fetching, setFetching] = useState(isEditing);
-  const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
-
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
@@ -34,35 +32,29 @@ export default function AdminPostEditor() {
     published_at: null as string | null
   });
 
-  useEffect(() => {
-    if (isEditing) {
-      fetchPost();
-    }
-  }, [id]);
-
-  const fetchPost = async () => {
-    try {
-      setFetching(true);
-      setError(null);
-      const { data, error: fetchError } = await supabase
+  // Fetch post data if editing
+  const { isLoading: fetching, error, data: postData } = useQuery({
+    queryKey: ["post", id],
+    queryFn: async () => {
+      if (!id) return null;
+      const { data, error } = await supabase
         .from("posts")
         .select("*")
         .eq("id", id)
         .single();
+      
+      if (error) throw error;
+      return data;
+    },
+    enabled: isEditing
+  });
 
-      if (fetchError) {
-        throw fetchError;
-      } else {
-        setFormData(data);
-      }
-    } catch (err: any) {
-      console.error("Error fetching post:", err);
-      setError(err.message || "Erro ao carregar os detalhes do post.");
-      toast.error("Erro ao carregar post");
-    } finally {
-      setFetching(false);
+  // Update form data when post data is loaded
+  useEffect(() => {
+    if (postData) {
+      setFormData(postData);
     }
-  };
+  }, [postData]);
 
   const handleSlugify = (title: string) => {
     return title
@@ -89,8 +81,6 @@ export default function AdminPostEditor() {
     if (!file) return;
 
     setUploading(true);
-    
-    // Generate a unique filename using timestamp and a random part
     const timestamp = Date.now();
     const randomPart = Math.random().toString(36).substring(2, 10);
     const fileExt = file.name.split(".").pop();
@@ -98,68 +88,59 @@ export default function AdminPostEditor() {
     const filePath = `post-images/${fileName}`;
 
     try {
-      console.log("Iniciando upload para:", filePath);
-      const { data, error: uploadError } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from("blog-images")
-        .upload(filePath, file, {
-          cacheControl: "3600",
-          upsert: false
-        });
+        .upload(filePath, file);
 
-      if (uploadError) {
-        console.error("Erro no upload do Supabase:", uploadError);
-        throw uploadError;
-      }
+      if (uploadError) throw uploadError;
 
-      console.log("Upload concluído, obtendo URL pública...");
       const { data: { publicUrl } } = supabase.storage
         .from("blog-images")
         .getPublicUrl(filePath);
 
-      console.log("URL pública obtida:", publicUrl);
       setFormData(prev => ({ ...prev, image_url: publicUrl }));
       toast.success("Imagem enviada com sucesso!");
     } catch (error: any) {
-      console.error("Erro capturado no handleImageUpload:", error);
-      toast.error("Erro no upload: " + (error.message || "Verifique sua conexão ou se você tem permissão."));
+      console.error("Erro no upload:", error);
+      toast.error("Erro no upload: " + (error.message || "Erro desconhecido"));
     } finally {
       setUploading(false);
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
+  const saveMutation = useMutation({
+    mutationFn: async (data: typeof formData) => {
       const dataToSave = {
-        ...formData,
-        published_at: formData.published && !formData.published_at ? new Date().toISOString() : formData.published_at
+        ...data,
+        published_at: data.published && !data.published_at ? new Date().toISOString() : data.published_at
       };
 
-      let error;
       if (isEditing) {
-        const { error: updateError } = await supabase
+        const { error } = await supabase
           .from("posts")
           .update(dataToSave)
           .eq("id", id);
-        error = updateError;
+        if (error) throw error;
       } else {
-        const { error: insertError } = await supabase
+        const { error } = await supabase
           .from("posts")
           .insert([dataToSave]);
-        error = insertError;
+        if (error) throw error;
       }
-
-      if (error) throw error;
-
+    },
+    onSuccess: () => {
       toast.success(isEditing ? "Post atualizado!" : "Post criado com sucesso!");
+      queryClient.invalidateQueries({ queryKey: ["admin-posts"] });
       navigate("/admin");
-    } catch (error: any) {
+    },
+    onError: (error: any) => {
       toast.error("Erro ao salvar post: " + error.message);
-    } finally {
-      setLoading(false);
     }
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    saveMutation.mutate(formData);
   };
 
   if (fetching) return (
