@@ -46,6 +46,7 @@ export function useProfile() {
 
     const init = async () => {
       try {
+        console.log("Initializing useProfile...");
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
         
         if (sessionError) {
@@ -55,8 +56,10 @@ export function useProfile() {
         }
 
         if (session?.user) {
+          console.log("Session found for user:", session.user.id);
           await getProfile(session.user.id);
         } else {
+          console.log("No session found");
           if (mounted) {
             setProfile(null);
             setLoading(false);

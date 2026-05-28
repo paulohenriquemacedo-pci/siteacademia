@@ -1,5 +1,6 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useProfile } from "@/hooks/use-profile";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { 
@@ -20,6 +21,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const navigate = useNavigate();
   const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    console.log("AdminLayout State:", { profile, loading });
+  }, [profile, loading]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
