@@ -34,6 +34,7 @@ export default function Auth() {
         toast.success("Login realizado com sucesso!");
         // Limpar cache e forçar recarregamento para garantir novo estado de sessão
         queryClient.clear();
+        window.localStorage.removeItem('sb-douhwqlpfgwuqwturdjw-auth-token'); // Limpeza preventiva do token
         setTimeout(() => {
           window.location.href = "/admin";
         }, 100);
