@@ -26,11 +26,13 @@ export default function Auth() {
 
     try {
       if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({
+        console.log("Attempting sign in with:", email);
+        const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password,
         });
         if (error) throw error;
+        console.log("Sign in successful, session:", data.session?.user?.id);
         toast.success("Login realizado com sucesso!");
         
         // Limpar caches locais e estados residuais
