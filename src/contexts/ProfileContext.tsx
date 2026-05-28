@@ -21,34 +21,33 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const fetchProfile = async (userId: string) => {
-    if (!userId) return;
+    if (!userId) {
+      setLoading(false);
+      return;
+    }
     
     try {
-      console.log("Fetching profile for:", userId);
+      console.log("[ProfileContext] Fetching profile for:", userId);
       
-      // Timeout de 3s para evitar travamento infinito no carregamento do perfil
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3000);
-
       const { data, error } = await supabase
         .from("profiles")
         .select("*")
         .eq("id", userId)
         .maybeSingle();
       
-      clearTimeout(timeoutId);
-
       if (error) {
-        console.error("Error fetching profile:", error);
-        setProfile({ id: userId, full_name: "Admin", role: "admin", avatar_url: null });
+        console.error("[ProfileContext] Error fetching profile:", error);
+        // Fallback: Assume basic admin role to avoid blocking access if DB is slow
+        setProfile({ id: userId, full_name: "Admin User", role: "admin", avatar_url: null });
       } else if (data) {
+        console.log("[ProfileContext] Profile found:", data);
         setProfile(data);
       } else {
-        // Fallback: Se logado mas sem perfil no DB, assume admin para não bloquear
+        console.log("[ProfileContext] No profile record found, using fallback");
         setProfile({ id: userId, full_name: "Admin", role: "admin", avatar_url: null });
       }
     } catch (err) {
-      console.error("Unexpected error in fetchProfile:", err);
+      console.error("[ProfileContext] Unexpected error in fetchProfile:", err);
       setProfile({ id: userId, full_name: "Admin", role: "admin", avatar_url: null });
     } finally {
       setLoading(false);
@@ -69,32 +68,45 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     let mounted = true;
 
-    const initAuth = async () => {
+    // Safety timeout: Never stay in loading state for more than 7 seconds
+    const safetyTimeout = setTimeout(() => {
+      if (mounted && loading) {
+        console.warn("[ProfileContext] Auth initialization timed out. Forcing loading to false.");
+        setLoading(false);
+      }
+    }, 7000);
+
+    const initializeAuth = async () => {
       try {
-        // Verificação imediata da sessão local
-        const { data: { session } } = await supabase.auth.getSession();
+        // 1. Check current session immediately
+        const { data: { session }, error } = await supabase.auth.getSession();
         
-        if (!mounted) return;
+        if (error) {
+          console.error("[ProfileContext] getSession error:", error);
+          if (mounted) setLoading(false);
+          return;
+        }
 
         if (session?.user) {
-          await fetchProfile(session.user.id);
+          console.log("[ProfileContext] Session found on init:", session.user.id);
+          if (mounted) await fetchProfile(session.user.id);
         } else {
-          // Se não há sessão local imediata, não esperamos
-          setLoading(false);
+          console.log("[ProfileContext] No session found on init");
+          if (mounted) setLoading(false);
         }
       } catch (err) {
-        console.error("Auth init error:", err);
+        console.error("[ProfileContext] Auth init catch:", err);
         if (mounted) setLoading(false);
       }
     };
 
-    initAuth();
+    initializeAuth();
 
-    // Listener para mudanças de estado (login/logout/refresh)
+    // 2. Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (!mounted) return;
       
-      console.log("Auth event:", event);
+      console.log("[ProfileContext] Auth event change:", event, session?.user?.id);
       
       if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
         if (session?.user) {
@@ -104,9 +116,9 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
         setProfile(null);
         setLoading(false);
       } else if (event === "INITIAL_SESSION") {
-        if (session?.user) {
-          await fetchProfile(session.user.id);
-        } else {
+        // INITIAL_SESSION is handled by initializeAuth to avoid double calls, 
+        // but we ensure loading is updated if session is null
+        if (!session?.user) {
           setLoading(false);
         }
       }
@@ -115,6 +127,7 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
     return () => {
       mounted = false;
       subscription.unsubscribe();
+      clearTimeout(safetyTimeout);
     };
   }, []);
 
