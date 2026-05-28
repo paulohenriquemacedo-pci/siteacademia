@@ -68,7 +68,7 @@ export default function AdminDashboard() {
       <div className="bg-white rounded-lg shadow border overflow-hidden">
         {error ? (
           <AdminErrorFallback 
-            error={error} 
+            error={(error as Error).message} 
             resetErrorBoundary={() => refetch()} 
             title="Erro na Listagem" 
           />
