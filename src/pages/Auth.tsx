@@ -38,10 +38,11 @@ export default function Auth() {
         // Limpar caches locais e estados residuais
         queryClient.clear();
         
-        // Pequeno atraso para o Supabase processar o novo estado da sessão localmente
+        // Uso de href em vez de navigate para garantir que todo o estado da aplicação
+        // seja reiniciado com a nova sessão do Supabase, evitando loops de redirecionamento.
         setTimeout(() => {
-          navigate("/admin", { replace: true });
-        }, 300);
+          window.location.href = "/admin";
+        }, 500);
       } else {
         const { error } = await supabase.auth.signUp({
           email,
