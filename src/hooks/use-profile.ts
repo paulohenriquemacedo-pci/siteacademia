@@ -45,21 +45,26 @@ export function useProfile() {
     }
 
     const init = async () => {
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      
-      if (sessionError) {
-        console.error("Session error:", sessionError);
-        if (mounted) setLoading(false);
-        return;
-      }
-
-      if (session?.user) {
-        await getProfile(session.user.id);
-      } else {
-        if (mounted) {
-          setProfile(null);
-          setLoading(false);
+      try {
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        
+        if (sessionError) {
+          console.error("Session error:", sessionError);
+          if (mounted) setLoading(false);
+          return;
         }
+
+        if (session?.user) {
+          await getProfile(session.user.id);
+        } else {
+          if (mounted) {
+            setProfile(null);
+            setLoading(false);
+          }
+        }
+      } catch (err) {
+        console.error("Error in init:", err);
+        if (mounted) setLoading(false);
       }
     };
 
