@@ -27,7 +27,6 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
     }
     
     try {
-      setLoading(true);
       console.log("[ProfileContext] Fetching profile for:", userId);
       
       const { data, error } = await supabase
@@ -38,13 +37,10 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
       
       if (error) {
         console.error("[ProfileContext] Error fetching profile:", error);
-        // Fallback: Assume basic admin role to avoid blocking access if DB is slow
         setProfile({ id: userId, full_name: "Admin User", role: "admin", avatar_url: null });
       } else if (data) {
-        console.log("[ProfileContext] Profile found:", data);
         setProfile(data);
       } else {
-        console.log("[ProfileContext] No profile record found, using fallback");
         setProfile({ id: userId, full_name: "Admin", role: "admin", avatar_url: null });
       }
     } catch (err) {
@@ -68,67 +64,54 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let mounted = true;
+    let authInitialized = false;
 
-    // Safety timeout: Never stay in loading state for more than 7 seconds
-    const safetyTimeout = setTimeout(() => {
-      if (mounted && loading) {
-        console.warn("[ProfileContext] Auth initialization timed out. Forcing loading to false.");
-        setLoading(false);
-      }
-    }, 7000);
-
-    const initializeAuth = async () => {
+    const handleAuthChange = async (session: any) => {
+      if (!mounted) return;
+      
       try {
-        // 1. Check current session immediately
-        const { data: { session }, error } = await supabase.auth.getSession();
-        
-        if (error) {
-          console.error("[ProfileContext] getSession error:", error);
-          if (mounted) setLoading(false);
-          return;
-        }
-
         if (session?.user) {
-          console.log("[ProfileContext] Session found on init:", session.user.id);
-          if (mounted) await fetchProfile(session.user.id);
+          console.log("[ProfileContext] User detected:", session.user.id);
+          await fetchProfile(session.user.id);
         } else {
-          console.log("[ProfileContext] No session found on init");
-          if (mounted) setLoading(false);
+          console.log("[ProfileContext] No user session");
+          setProfile(null);
+          setLoading(false);
         }
       } catch (err) {
-        console.error("[ProfileContext] Auth init catch:", err);
-        if (mounted) setLoading(false);
+        console.error("[ProfileContext] Error in handleAuthChange:", err);
+        setLoading(false);
+      } finally {
+        authInitialized = true;
       }
     };
 
-    initializeAuth();
-
-    // 2. Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (!mounted) return;
-      
-      console.log("[ProfileContext] Auth event change:", event, session?.user?.id);
-      
-      if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
-        if (session?.user) {
-          await fetchProfile(session.user.id);
-        }
-      } else if (event === "SIGNED_OUT") {
-        setProfile(null);
-        setLoading(false);
-      } else if (event === "INITIAL_SESSION") {
-        // INITIAL_SESSION is handled by initializeAuth to avoid double calls, 
-        // but we ensure loading is updated if session is null
-        if (!session?.user) {
-          setLoading(false);
-        }
+    // Check initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!authInitialized) {
+        handleAuthChange(session);
       }
     });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log("[ProfileContext] Auth event:", event);
+      // We always process events to stay in sync
+      handleAuthChange(session);
+    });
+
+    // Safety timeout - force stop loading if still active after 5 seconds
+    const safetyTimer = setTimeout(() => {
+      if (mounted && !authInitialized) {
+        console.warn("[ProfileContext] Safety timeout hit, forcing loading to false");
+        setLoading(false);
+      }
+    }, 5000);
 
     return () => {
       mounted = false;
       subscription.unsubscribe();
-      clearTimeout(safetyTimeout);
+      clearTimeout(safetyTimer);
     };
   }, []);
 
