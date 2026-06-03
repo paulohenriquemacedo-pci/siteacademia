@@ -293,6 +293,45 @@ export default function AdminPostEditor() {
                 />
               </div>
 
+              <div className="space-y-2 border-t pt-4">
+                <Label htmlFor="scheduled_for" className="font-bold">
+                  Agendar publicação
+                </Label>
+                <p className="text-xs text-gray-500">
+                  Horário de Brasília (BRT). Deixe vazio para não agendar.
+                </p>
+                <div className="flex gap-2">
+                  <Input
+                    id="scheduled_for"
+                    type="datetime-local"
+                    value={scheduledLocal}
+                    onChange={(e) => setScheduledLocal(e.target.value)}
+                  />
+                  {scheduledLocal && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setScheduledLocal("")}
+                    >
+                      Limpar
+                    </Button>
+                  )}
+                </div>
+                {scheduledLocal &&
+                  new Date(brtLocalInputToUtcIso(scheduledLocal)).getTime() >
+                    Date.now() && (
+                    <p className="text-xs text-yellow-700 bg-yellow-50 p-2 rounded">
+                      Post será publicado automaticamente em{" "}
+                      {new Date(
+                        brtLocalInputToUtcIso(scheduledLocal)
+                      ).toLocaleString("pt-BR", {
+                        timeZone: "America/Sao_Paulo",
+                      })}{" "}
+                      (BRT).
+                    </p>
+                  )}
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="category">Categoria</Label>
                 <Input 
