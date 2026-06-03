@@ -5,4 +5,33 @@
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
+  <url>
+    <loc>https://sistemaacademia.com.br/blog</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sistemaacademia.com.br/blog/a-ps-graduao-brasileira-como-descobrir-seu-perfil-de-improdutividade-acadmica-e-transformar-sua-jornada</loc>
+    <lastmod>2026-06-02T21:05:37.414Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://sistemaacademia.com.br/blog/por-que-voc-nunca-sente-que-tem-informao-suficiente-para-escrever-a-pesquisa-infinita</loc>
+    <lastmod>2026-05-29T21:22:18.167Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://sistemaacademia.com.br/blog/ps-graduao-brasileira-o-esgotamento-silencioso-que-ningum-ousa-falar-e-como-super-lo</loc>
+    <lastmod>2026-05-28T02:29:48.003Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://sistemaacademia.com.br/blog/a-ps-graduao-brasileira-est-formando-pesquisadores-esgotados-e-pouco-se-fala-sobre-isso</loc>
+    <lastmod>2026-05-22T22:35:03.494Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
 </urlset>
