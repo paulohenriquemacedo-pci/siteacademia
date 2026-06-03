@@ -142,9 +142,24 @@ export default function AdminPostEditor() {
 
   const saveMutation = useMutation({
     mutationFn: async (data: typeof formData) => {
-      const dataToSave = {
+      // Resolve scheduling
+      let scheduled_for: string | null = null;
+      if (scheduledLocal) {
+        scheduled_for = brtLocalInputToUtcIso(scheduledLocal);
+      }
+      const isFutureSchedule =
+        scheduled_for !== null && new Date(scheduled_for).getTime() > Date.now();
+
+      const dataToSave: any = {
         ...data,
-        published_at: data.published && !data.published_at ? new Date().toISOString() : data.published_at
+        scheduled_for,
+        // If user picked a future date, force unpublished until cron flips it.
+        published: isFutureSchedule ? false : data.published,
+        published_at: isFutureSchedule
+          ? null
+          : data.published && !data.published_at
+          ? new Date().toISOString()
+          : data.published_at,
       };
 
       if (isEditing) {
