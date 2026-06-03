@@ -55,9 +55,38 @@ export default function AdminPostEditor() {
   // Update form data when post data is loaded
   useEffect(() => {
     if (postData) {
-      setFormData(postData);
+      setFormData({ ...formData, ...postData });
+      if (postData.scheduled_for) {
+        setScheduledLocal(utcToBrtLocalInput(postData.scheduled_for));
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postData]);
+
+  // Convert a UTC ISO string to a "YYYY-MM-DDTHH:mm" string in São Paulo time
+  function utcToBrtLocalInput(iso: string): string {
+    const d = new Date(iso);
+    const parts = new Intl.DateTimeFormat("sv-SE", {
+      timeZone: "America/Sao_Paulo",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }).formatToParts(d);
+    const get = (t: string) => parts.find((p) => p.type === t)?.value ?? "00";
+    return `${get("year")}-${get("month")}-${get("day")}T${get("hour")}:${get("minute")}`;
+  }
+
+  // Convert "YYYY-MM-DDTHH:mm" entered as São Paulo local time → UTC ISO
+  function brtLocalInputToUtcIso(local: string): string {
+    // BRT is UTC-3 (no DST since 2019)
+    const [datePart, timePart] = local.split("T");
+    const [y, mo, d] = datePart.split("-").map(Number);
+    const [h, mi] = timePart.split(":").map(Number);
+    return new Date(Date.UTC(y, mo - 1, d, h + 3, mi)).toISOString();
+  }
 
   const handleSlugify = (title: string) => {
     return title
