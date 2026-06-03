@@ -29,8 +29,11 @@ export default function AdminPostEditor() {
     image_url: "",
     read_time: "",
     published: false,
-    published_at: null as string | null
+    published_at: null as string | null,
+    scheduled_for: null as string | null,
   });
+  // Local datetime-local input value (BRT). Empty = no scheduling.
+  const [scheduledLocal, setScheduledLocal] = useState<string>("");
 
   // Fetch post data if editing
   const { isLoading: fetching, error, data: postData } = useQuery({
