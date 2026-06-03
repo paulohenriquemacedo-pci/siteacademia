@@ -105,11 +105,34 @@ export default function AdminDashboard() {
                     <TableCell className="font-medium">{post.title}</TableCell>
                     <TableCell>{post.category}</TableCell>
                     <TableCell>
-                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                        post.published ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
-                      }`}>
-                        {post.published ? "Publicado" : "Rascunho"}
-                      </span>
+                      {(() => {
+                        const scheduled =
+                          post.scheduled_for &&
+                          !post.published &&
+                          new Date(post.scheduled_for).getTime() > Date.now();
+                        if (scheduled) {
+                          return (
+                            <span className="px-2 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
+                              Agendado ·{" "}
+                              {new Date(post.scheduled_for).toLocaleString(
+                                "pt-BR",
+                                { timeZone: "America/Sao_Paulo" }
+                              )}
+                            </span>
+                          );
+                        }
+                        return (
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                              post.published
+                                ? "bg-green-100 text-green-700"
+                                : "bg-gray-100 text-gray-700"
+                            }`}
+                          >
+                            {post.published ? "Publicado" : "Rascunho"}
+                          </span>
+                        );
+                      })()}
                     </TableCell>
                     <TableCell>{new Date(post.created_at).toLocaleDateString()}</TableCell>
                     <TableCell className="text-right">

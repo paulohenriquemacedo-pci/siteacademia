@@ -29,8 +29,11 @@ export default function AdminPostEditor() {
     image_url: "",
     read_time: "",
     published: false,
-    published_at: null as string | null
+    published_at: null as string | null,
+    scheduled_for: null as string | null,
   });
+  // Local datetime-local input value (BRT). Empty = no scheduling.
+  const [scheduledLocal, setScheduledLocal] = useState<string>("");
 
   // Fetch post data if editing
   const { isLoading: fetching, error, data: postData } = useQuery({
@@ -52,9 +55,38 @@ export default function AdminPostEditor() {
   // Update form data when post data is loaded
   useEffect(() => {
     if (postData) {
-      setFormData(postData);
+      setFormData({ ...formData, ...postData });
+      if (postData.scheduled_for) {
+        setScheduledLocal(utcToBrtLocalInput(postData.scheduled_for));
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postData]);
+
+  // Convert a UTC ISO string to a "YYYY-MM-DDTHH:mm" string in São Paulo time
+  function utcToBrtLocalInput(iso: string): string {
+    const d = new Date(iso);
+    const parts = new Intl.DateTimeFormat("sv-SE", {
+      timeZone: "America/Sao_Paulo",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }).formatToParts(d);
+    const get = (t: string) => parts.find((p) => p.type === t)?.value ?? "00";
+    return `${get("year")}-${get("month")}-${get("day")}T${get("hour")}:${get("minute")}`;
+  }
+
+  // Convert "YYYY-MM-DDTHH:mm" entered as São Paulo local time → UTC ISO
+  function brtLocalInputToUtcIso(local: string): string {
+    // BRT is UTC-3 (no DST since 2019)
+    const [datePart, timePart] = local.split("T");
+    const [y, mo, d] = datePart.split("-").map(Number);
+    const [h, mi] = timePart.split(":").map(Number);
+    return new Date(Date.UTC(y, mo - 1, d, h + 3, mi)).toISOString();
+  }
 
   const handleSlugify = (title: string) => {
     return title
@@ -110,9 +142,24 @@ export default function AdminPostEditor() {
 
   const saveMutation = useMutation({
     mutationFn: async (data: typeof formData) => {
-      const dataToSave = {
+      // Resolve scheduling
+      let scheduled_for: string | null = null;
+      if (scheduledLocal) {
+        scheduled_for = brtLocalInputToUtcIso(scheduledLocal);
+      }
+      const isFutureSchedule =
+        scheduled_for !== null && new Date(scheduled_for).getTime() > Date.now();
+
+      const dataToSave: any = {
         ...data,
-        published_at: data.published && !data.published_at ? new Date().toISOString() : data.published_at
+        scheduled_for,
+        // If user picked a future date, force unpublished until cron flips it.
+        published: isFutureSchedule ? false : data.published,
+        published_at: isFutureSchedule
+          ? null
+          : data.published && !data.published_at
+          ? new Date().toISOString()
+          : data.published_at,
       };
 
       if (isEditing) {
@@ -244,6 +291,45 @@ export default function AdminPostEditor() {
                   checked={formData.published} 
                   onCheckedChange={(checked) => setFormData(prev => ({ ...prev, published: checked }))} 
                 />
+              </div>
+
+              <div className="space-y-2 border-t pt-4">
+                <Label htmlFor="scheduled_for" className="font-bold">
+                  Agendar publicação
+                </Label>
+                <p className="text-xs text-gray-500">
+                  Horário de Brasília (BRT). Deixe vazio para não agendar.
+                </p>
+                <div className="flex gap-2">
+                  <Input
+                    id="scheduled_for"
+                    type="datetime-local"
+                    value={scheduledLocal}
+                    onChange={(e) => setScheduledLocal(e.target.value)}
+                  />
+                  {scheduledLocal && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setScheduledLocal("")}
+                    >
+                      Limpar
+                    </Button>
+                  )}
+                </div>
+                {scheduledLocal &&
+                  new Date(brtLocalInputToUtcIso(scheduledLocal)).getTime() >
+                    Date.now() && (
+                    <p className="text-xs text-yellow-700 bg-yellow-50 p-2 rounded">
+                      Post será publicado automaticamente em{" "}
+                      {new Date(
+                        brtLocalInputToUtcIso(scheduledLocal)
+                      ).toLocaleString("pt-BR", {
+                        timeZone: "America/Sao_Paulo",
+                      })}{" "}
+                      (BRT).
+                    </p>
+                  )}
               </div>
 
               <div className="space-y-2">
