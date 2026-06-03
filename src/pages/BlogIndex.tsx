@@ -1,6 +1,7 @@
 import Header from "@/components/sections/Header";
 import Footer from "@/components/sections/Footer";
 import BlogCard from "@/components/BlogCard";
+import { Helmet } from "react-helmet-async";
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
@@ -26,6 +27,15 @@ const BlogIndex = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <Helmet prioritizeSeoTags>
+        <title>Blog | Sistema A.C.A.D.E.M.I.A — Produtividade Acadêmica para Mestrado e Doutorado</title>
+        <meta name="description" content="Artigos sobre produtividade acadêmica, superação da procrastinação e método científico para mestrandos, doutorandos e graduandos em TCC." />
+        <link rel="canonical" href="https://sistemaacademia.com.br/blog" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://sistemaacademia.com.br/blog" />
+        <meta property="og:title" content="Blog | Sistema A.C.A.D.E.M.I.A" />
+        <meta property="og:description" content="Artigos sobre produtividade acadêmica, superação da procrastinação e método científico para mestrandos, doutorandos e graduandos em TCC." />
+      </Helmet>
       <Header />
       <main className="flex-grow pt-32 pb-24 bg-slate-50">
         <div className="container px-4 mx-auto">

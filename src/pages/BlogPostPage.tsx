@@ -92,31 +92,58 @@ const BlogPostPage = () => {
 
   const imageUrl = post.image_url || "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&auto=format&fit=crop&q=60";
   const authorName = post.author?.full_name || "Equipe Academia";
+  const canonicalUrl = `https://sistemaacademia.com.br/blog/${slug}`;
+  const rawDescription = post.excerpt || "Leia mais sobre este post no blog do Sistema A.C.A.D.E.M.I.A";
+  const description = rawDescription.length > 155 ? rawDescription.slice(0, 152).trimEnd() + "..." : rawDescription;
+  const publishedISO = new Date(post.published_at || post.created_at).toISOString();
+  const modifiedISO = new Date(post.updated_at || post.published_at || post.created_at).toISOString();
+
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description,
+    image: imageUrl,
+    author: { "@type": "Organization", name: "Método PCI" },
+    publisher: {
+      "@type": "Organization",
+      name: "Sistema A.C.A.D.E.M.I.A",
+      url: "https://sistemaacademia.com.br",
+    },
+    datePublished: publishedISO,
+    dateModified: modifiedISO,
+    url: canonicalUrl,
+    mainEntityOfPage: { "@type": "WebPage", "@id": canonicalUrl },
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Helmet prioritizeSeoTags>
         <title>{post.title} | Sistema A.C.A.D.E.M.I.A</title>
-        <meta name="description" content={post.excerpt || "Leia mais sobre este post no blog do Sistema A.C.A.D.E.M.I.A"} />
-        
-        {/* Open Graph / Facebook - Essential for sharing */}
+        <meta name="description" content={description} />
+
+        {/* Open Graph / Facebook */}
         <meta property="og:type" content="article" />
-        <meta property="og:url" content={`https://sistemaacademia.com.br/blog/${slug}`} />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:title" content={post.title} />
-        <meta property="og:description" content={post.excerpt || "Leia mais sobre este post no blog do Sistema A.C.A.D.E.M.I.A"} />
+        <meta property="og:description" content={description} />
         <meta property="og:image" content={imageUrl} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:site_name" content="Sistema A.C.A.D.E.M.I.A" />
+        <meta property="article:published_time" content={publishedISO} />
+        <meta property="article:modified_time" content={modifiedISO} />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content={`https://sistemaacademia.com.br/blog/${slug}`} />
+        <meta name="twitter:url" content={canonicalUrl} />
         <meta name="twitter:title" content={post.title} />
-        <meta name="twitter:description" content={post.excerpt || "Leia mais sobre este post no blog do Sistema A.C.A.D.E.M.I.A"} />
+        <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={imageUrl} />
-        
-        <link rel="canonical" href={`https://sistemaacademia.com.br/blog/${slug}`} />
+
+        <link rel="canonical" href={canonicalUrl} />
+
+        <script type="application/ld+json">{JSON.stringify(articleJsonLd)}</script>
       </Helmet>
       <Header />
       
