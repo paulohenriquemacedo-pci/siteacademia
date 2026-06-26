@@ -25,12 +25,12 @@ const BlogCard = ({ post }: BlogCardProps) => {
   const readTimeStr = post.read_time || post.readTime || "5 min";
 
   return (
-    <article className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 flex flex-col h-full">
+    <article className="group bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 flex flex-col h-full">
       <Link to={`/blog/${post.slug}`} className="block overflow-hidden aspect-video">
         <img
           src={imageUrl}
           alt={post.title}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="w-full h-full object-cover"
           loading="lazy"
         />
       </Link>
