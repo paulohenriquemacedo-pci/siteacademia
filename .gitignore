@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Lovable (editor de origem — não necessário no repositório)
+.lovable

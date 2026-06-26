@@ -58,7 +58,7 @@ const FinalCTA = () => {
               Diagnóstico
             </span>
             <h3 className="font-heading font-semibold text-xl text-primary-foreground mb-3">
-              Quiz do Perfil de Improdutividade
+              Quiz do Perfil de Produtividade
             </h3>
             <p className="font-serif text-sm text-primary-foreground/80 mb-5">
               Diagnóstico gratuito construído a partir do Sistema A.C.A.D.E.M.I.A.
@@ -69,14 +69,14 @@ const FinalCTA = () => {
               personalizado com o seu perfil e os próximos passos práticos.
             </p>
             <ul className="font-serif text-sm text-primary-foreground/80 space-y-2 mb-6 flex-1">
-              <li className="flex gap-2"><span className="text-accent">—</span> Identificação do seu perfil de improdutividade acadêmica</li>
+              <li className="flex gap-2"><span className="text-accent">—</span> Identificação do seu perfil de produtividade acadêmica</li>
               <li className="flex gap-2"><span className="text-accent">—</span> Análise dos gargalos de escrita, leitura e planejamento</li>
               <li className="flex gap-2"><span className="text-accent">—</span> Relatório com plano de implementação operacional</li>
               <li className="flex gap-2"><span className="text-accent">—</span> Base metodológica do livro Pesquisador Produtivo (ISBN/CBL)</li>
               <li className="flex gap-2"><span className="text-accent">—</span> Sem diagnóstico clínico: mede padrões, não traços fixos</li>
             </ul>
             <a
-              href="https://quiz.sistemaacademia.com.br/"
+              href="https://diagnostico.sistemaacademia.com.br/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 bg-primary-foreground text-primary font-heading font-semibold text-sm px-5 py-3 rounded hover:bg-primary-foreground/90 transition-colors self-start"

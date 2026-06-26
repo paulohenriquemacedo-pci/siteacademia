@@ -16,6 +16,7 @@ const products = [
     badge: "Gratuito",
     featured: false,
     cta: "Fazer o quiz →",
+    href: "https://diagnostico.sistemaacademia.com.br/",
   },
   {
     title: "E-book: Escrita Científica",
@@ -71,7 +72,7 @@ const Products = () => {
               <h3 className="font-heading font-bold text-base text-primary mb-2">{p.title}</h3>
               <p className="text-sm text-muted-foreground flex-1 mb-4">{p.desc}</p>
               <Button asChild variant={p.featured ? "default" : "outline"} size="sm" className={p.featured ? "bg-accent hover:bg-accent/90 text-accent-foreground" : ""}>
-                <a href="#">{p.cta}</a>
+                <a href={p.href || "#"} target={p.href ? "_blank" : undefined} rel={p.href ? "noopener noreferrer" : undefined}>{p.cta}</a>
               </Button>
             </div>
           ))}

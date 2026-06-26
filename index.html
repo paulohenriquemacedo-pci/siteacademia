@@ -34,7 +34,7 @@
     <!-- Dynamic twitter tags will be handled by Helmet and JS -->
 
     <script>
-      // Bloqueia indexação em hosts que não sejam o domínio próprio (ex.: *.lovable.app, preview)
+      // Bloqueia indexação em hosts que não sejam o domínio próprio (ex.: ambientes de preview/staging)
       (function () {
         var h = location.hostname;
         if (h !== 'sistemaacademia.com.br' && h !== 'www.sistemaacademia.com.br') {

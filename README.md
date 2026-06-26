@@ -1,73 +1,65 @@
-# Welcome to your Lovable project
+# Sistema A.C.A.D.E.M.I.A — Site Oficial
 
-## Project info
+Site institucional do **Sistema A.C.A.D.E.M.I.A**, método de produtividade acadêmica estruturado em 8 pilares para mestrandos, doutorandos e graduandos em TCC.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Tecnologias
 
-## How can I edit this code?
+- [Vite](https://vitejs.dev/) + [React](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/) + [shadcn/ui](https://ui.shadcn.com/)
+- [Supabase](https://supabase.com/) (banco de dados, autenticação e Edge Functions)
+- [React Router](https://reactrouter.com/) (roteamento SPA)
 
-There are several ways of editing your application.
+## Como rodar localmente
 
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+Requisito: Node.js >= 18 e npm instalados.
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# 1. Clone o repositório
+git clone https://github.com/paulohenriquemacedo-pci/siteacademia.git
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# 2. Entre na pasta
+cd siteacademia
 
-# Step 3: Install the necessary dependencies.
-npm i
+# 3. Instale as dependências
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# 4. Copie o arquivo de variáveis de ambiente e preencha com suas credenciais do Supabase
+cp .env.example .env
+
+# 5. Inicie o servidor de desenvolvimento
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Variáveis de ambiente
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
 
-**Use GitHub Codespaces**
+```
+VITE_SUPABASE_URL=https://seu-projeto.supabase.co
+VITE_SUPABASE_ANON_KEY=sua-chave-anon-publica
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Build para produção
 
-## What technologies are used for this project?
+```sh
+npm run build
+```
 
-This project is built with:
+A pasta `dist/` gerada contém os arquivos estáticos prontos para deploy.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Estrutura de rotas
 
-## How can I deploy this project?
+| Rota | Descrição |
+|------|-----------|
+| `/` | Página principal |
+| `/blog` | Listagem de posts |
+| `/blog/:slug` | Post individual |
+| `/admin` | Painel administrativo (requer autenticação) |
+| `/admin/posts/new` | Criar novo post |
+| `/admin/posts/edit/:id` | Editar post |
+| `/termos` | Termos de uso |
+| `/privacidade` | Política de privacidade |
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+## Deploy na Hostinger
 
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+O projeto é um SPA (Single Page Application). O arquivo `public/.htaccess` já está configurado para redirecionar todas as rotas para `index.html`, garantindo que a navegação funcione corretamente no servidor Apache da Hostinger.

@@ -57,7 +57,7 @@ Deno.serve(async (req) => {
         }
 
         if (recipientEmail) {
-          const publicUrl = `https://siteacademia.lovable.app/blog/${post.slug}`;
+          const publicUrl = `https://sistemaacademia.com.br/blog/${post.slug}`;
           const { error: mailErr } = await supabase.functions.invoke(
             "send-transactional-email",
             {
