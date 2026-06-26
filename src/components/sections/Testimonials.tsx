@@ -9,10 +9,10 @@ import {
 import juliannaAvatar from "@/assets/testimonials/julianabrandao.png";
 import anaAvatar from "@/assets/testimonials/anapaula.png";
 import ricardoAvatar from "@/assets/testimonials/ricardosousa.png";
-import juliannaScreenshot from "@/assets/testimonials/julianna-screenshot.jpeg";
-import anaScreenshot from "@/assets/testimonials/ana-screenshot.png";
-import ricardoScreenshot from "@/assets/testimonials/ricardo-screenshot.png";
-import janaScreenshot from "@/assets/testimonials/jana-screenshot.png";
+import juliannaScreenshot from "@/assets/testimonials/julianna-screenshot.webp";
+import anaScreenshot from "@/assets/testimonials/ana-screenshot.webp";
+import ricardoScreenshot from "@/assets/testimonials/ricardo-screenshot.webp";
+import janaScreenshot from "@/assets/testimonials/jana-screenshot.webp";
 
 type Testimonial = {
   name: string;
