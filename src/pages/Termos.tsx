@@ -37,7 +37,7 @@ const Termos = () => {
               </h2>
               <p>
                 Este site tem finalidade exclusivamente <strong>institucional e informativa</strong>.
-                Apresenta o método, os pilares e os produtos relacionados (livro "Pesquisador Produtivo"
+                Apresenta o método, os pilares e os produtos relacionados (livro "Pesquisador Produtivo: o Sistema A.C.A.D.E.M.I.A"
                 e Quiz do Perfil de Produtividade), e direciona o usuário para páginas externas onde
                 tais produtos podem ser conhecidos ou adquiridos. Este site, por si só, não realiza
                 vendas nem coleta pagamentos.

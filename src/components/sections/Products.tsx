@@ -4,11 +4,12 @@ import { useFadeIn } from "@/hooks/useFadeIn";
 
 const products = [
   {
-    title: "Sistema A.C.A.D.E.M.I.A. — O Livro",
+    title: "Pesquisador Produtivo: o Sistema A.C.A.D.E.M.I.A",
     desc: "O guia completo com 8 módulos, exercícios e referências.",
     badge: "Produto Principal",
     featured: true,
     cta: "Adquirir →",
+    href: "https://pagelivro.sistemaacademia.com.br/",
   },
   {
     title: "Quiz Diagnóstico",
