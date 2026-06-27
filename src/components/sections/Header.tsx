@@ -24,6 +24,8 @@ const Header = () => {
             src={logoAcademia}
             alt="Logomarca Sistema A.C.A.D.E.M.I.A."
             className="h-12 w-auto"
+            width={85}
+            height={48}
           />
         </Link>
 

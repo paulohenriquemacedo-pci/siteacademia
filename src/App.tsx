@@ -32,7 +32,33 @@ const AppContent = () => {
   const location = useLocation();
 
   useEffect(() => {
-    initGA();
+    let active = true;
+    const loadGA = () => {
+      if (!active) return;
+      active = false;
+      initGA();
+      logPageView();
+      
+      // Remove event listeners
+      window.removeEventListener("scroll", loadGA);
+      window.removeEventListener("touchstart", loadGA);
+      window.removeEventListener("click", loadGA);
+    };
+
+    // Fallback load after 3.5 seconds of idle time
+    const timer = setTimeout(loadGA, 3500);
+
+    window.addEventListener("scroll", loadGA, { passive: true });
+    window.addEventListener("touchstart", loadGA, { passive: true });
+    window.addEventListener("click", loadGA, { passive: true });
+
+    return () => {
+      active = false;
+      clearTimeout(timer);
+      window.removeEventListener("scroll", loadGA);
+      window.removeEventListener("touchstart", loadGA);
+      window.removeEventListener("click", loadGA);
+    };
   }, []);
 
   useEffect(() => {

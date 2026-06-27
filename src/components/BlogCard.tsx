@@ -32,6 +32,8 @@ const BlogCard = ({ post }: BlogCardProps) => {
           alt={post.title}
           className="w-full h-full object-cover"
           loading="lazy"
+          width={400}
+          height={225}
         />
       </Link>
       

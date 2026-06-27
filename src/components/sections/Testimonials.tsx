@@ -123,6 +123,8 @@ const Testimonials = () => {
                         alt={`Print do depoimento de ${t.name}`}
                         loading="lazy"
                         className="w-full rounded-md border border-border"
+                        width={338}
+                        height={670}
                       />
                       <figcaption className="sr-only">Captura de tela original do depoimento</figcaption>
                     </figure>
@@ -135,6 +137,8 @@ const Testimonials = () => {
                         alt={`Foto de ${t.name}`}
                         loading="lazy"
                         className="h-12 w-12 rounded-full object-cover border border-border shrink-0"
+                        width={48}
+                        height={48}
                       />
                     ) : (
                       <div
