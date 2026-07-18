@@ -17,7 +17,7 @@ const products = [
     badge: "Gratuito",
     featured: false,
     cta: "Fazer o quiz →",
-    href: "https://diagnostico.sistemaacademia.com.br/",
+    href: "https://quiz.sistemaacademia.com.br/",
   },
   {
     title: "E-book: Escrita Científica",

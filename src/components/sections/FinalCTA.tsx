@@ -76,7 +76,7 @@ const FinalCTA = () => {
               <li className="flex gap-2"><span className="text-accent">—</span> Sem diagnóstico clínico: mede padrões, não traços fixos</li>
             </ul>
             <a
-              href="https://diagnostico.sistemaacademia.com.br/"
+              href="https://quiz.sistemaacademia.com.br/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 bg-primary-foreground text-primary font-heading font-semibold text-sm px-5 py-3 rounded hover:bg-primary-foreground/90 transition-colors self-start"

@@ -25,7 +25,7 @@ const NextSteps = () => {
             </p>
             <p className="text-primary-foreground/50 text-xs mb-6">48 perguntas · 6 perfis · Gratuito</p>
             <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground font-heading w-full">
-              <a href="https://diagnostico.sistemaacademia.com.br/" target="_blank" rel="noopener noreferrer">Começar o quiz →</a>
+              <a href="https://quiz.sistemaacademia.com.br/" target="_blank" rel="noopener noreferrer">Começar o quiz →</a>
             </Button>
           </div>
 
