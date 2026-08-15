@@ -1,4 +1,1 @@
 project_id = "spvqpojidgabjekmnkav"
-
-[functions.publish-scheduled-posts]
-verify_jwt = false
