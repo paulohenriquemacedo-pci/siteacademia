@@ -7,10 +7,6 @@
     <meta name="description" content="Diagnóstico gratuito da produtividade acadêmica e site do Sistema A.C.A.D.E.M.I.A." />
     <meta name="robots" content="noindex" />
 
-    <!-- Geolocalização de borda (Cloudflare Worker) usada pelo tracker.js no
-         PageView inicial. Mesmo mecanismo do quiz.sistemaacademia.com.br —
-         ver comentário lá pra detalhes. Duplicado por necessidade (página
-         estática separada, sem build-time config compartilhada). -->
     <link rel="preconnect" href="https://pci-traqueamento.geo-worker.workers.dev" crossorigin />
     <script>
       window.__tqGeoPromise = fetch("https://pci-traqueamento.geo-worker.workers.dev", {
@@ -31,15 +27,6 @@
 
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a2f4c' stroke-width='2'><path d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'/><path d='M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'/></svg>" />
 
-    <!-- PIXEL QUIZ PHM (mesmo pixel do quiz — mesma conta de anúncio) -->
-    <script>
-    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-    document,'script','https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1761200925125045');
-    </script>
     <script src="https://tracking.sistemaacademia.com.br/tracker.js" async></script>
 
     <style>
