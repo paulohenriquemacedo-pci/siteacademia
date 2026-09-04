@@ -38,7 +38,7 @@ const NextSteps = () => {
             <p className="text-primary-foreground/70 text-sm mb-4">
               O guia definitivo com os 8 módulos, exercícios práticos e referências completas.
             </p>
-            <p className="text-primary-foreground/50 text-xs mb-6">392 páginas · 8 módulos · ISBN registrado</p>
+            <p className="text-primary-foreground/50 text-xs mb-6">87 páginas · 8 módulos · ISBN registrado</p>
             <Button asChild variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10 font-heading w-full">
               <a href="https://livro.sistemaacademia.com.br/" target="_blank" rel="noopener noreferrer">Conheça o livro →</a>
             </Button>
