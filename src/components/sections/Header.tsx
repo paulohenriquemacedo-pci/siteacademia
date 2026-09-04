@@ -43,6 +43,11 @@ const Header = () => {
           <Button asChild variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground font-heading text-sm">
             <a href="#sistema">Conheça os módulos</a>
           </Button>
+          <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground font-heading text-sm">
+            <a href="https://livro.sistemaacademia.com.br/" target="_blank" rel="noopener noreferrer">
+              Adquirir o livro
+            </a>
+          </Button>
         </nav>
 
         {/* Mobile hamburger */}
@@ -67,6 +72,16 @@ const Header = () => {
               ))}
               <Button asChild variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground font-heading mt-2">
                 <a href="#sistema" onClick={() => setOpen(false)}>Conheça os módulos</a>
+              </Button>
+              <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground font-heading">
+                <a
+                  href="https://livro.sistemaacademia.com.br/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setOpen(false)}
+                >
+                  Adquirir o livro
+                </a>
               </Button>
             </nav>
           </SheetContent>

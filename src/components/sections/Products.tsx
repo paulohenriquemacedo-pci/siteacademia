@@ -9,7 +9,7 @@ const products = [
     badge: "Produto Principal",
     featured: true,
     cta: "Adquirir →",
-    href: "https://pagelivro.sistemaacademia.com.br/",
+    href: "https://livro.sistemaacademia.com.br/",
   },
   {
     title: "Quiz Diagnóstico",

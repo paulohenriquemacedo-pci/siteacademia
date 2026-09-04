@@ -40,7 +40,7 @@ const NextSteps = () => {
             </p>
             <p className="text-primary-foreground/50 text-xs mb-6">392 páginas · 8 módulos · ISBN registrado</p>
             <Button asChild variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10 font-heading w-full">
-              <a href="https://pagelivro.sistemaacademia.com.br/" target="_blank" rel="noopener noreferrer">Conheça o livro →</a>
+              <a href="https://livro.sistemaacademia.com.br/" target="_blank" rel="noopener noreferrer">Conheça o livro →</a>
             </Button>
           </div>
         </div>

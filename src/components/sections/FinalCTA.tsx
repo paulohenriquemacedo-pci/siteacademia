@@ -43,7 +43,7 @@ const FinalCTA = () => {
               <li className="flex gap-2"><span className="text-accent">—</span> Diálogo produtivo com o orientador e entregas mensuráveis</li>
             </ul>
             <a
-              href="https://pagelivro.sistemaacademia.com.br/"
+              href="https://livro.sistemaacademia.com.br/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 bg-accent text-accent-foreground font-heading font-semibold text-sm px-5 py-3 rounded hover:bg-accent/90 transition-colors self-start"
