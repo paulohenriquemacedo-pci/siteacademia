@@ -91,6 +91,8 @@
     <div class="card" id="preview-card" style="display:none;">
       <h3>2. Revisar e publicar</h3>
       <div class="preview">
+        <img id="pv-image" style="display:none; width:100%; max-height:280px; object-fit:cover; border-radius:8px; margin-bottom:16px;" />
+        <div id="pv-image-hint" class="hint" style="display:none; margin-bottom:12px;">Nenhuma imagem encontrada — o post vai usar o placeholder padrão do site.</div>
         <h2 class="pv-title" id="pv-title"></h2>
         <div class="pv-excerpt" id="pv-excerpt"></div>
         <div id="pv-content"></div>
@@ -215,6 +217,16 @@ document.getElementById("btn-generate").addEventListener("click", async () => {
     document.getElementById("pv-title").textContent = data.title;
     document.getElementById("pv-excerpt").textContent = data.excerpt;
     document.getElementById("pv-content").innerHTML = data.content;
+    const imgEl = document.getElementById("pv-image");
+    const imgHint = document.getElementById("pv-image-hint");
+    if (data.image_url) {
+      imgEl.src = data.image_url;
+      imgEl.style.display = "block";
+      imgHint.style.display = "none";
+    } else {
+      imgEl.style.display = "none";
+      imgHint.style.display = "block";
+    }
     document.getElementById("preview-card").style.display = "block";
     document.getElementById("preview-card").scrollIntoView({ behavior: "smooth" });
   } catch (e) {
@@ -247,6 +259,7 @@ document.getElementById("btn-publish").addEventListener("click", async () => {
       title: lastGeneration.title,
       excerpt: lastGeneration.excerpt,
       content: lastGeneration.content,
+      image_url: lastGeneration.image_url || null,
       category,
       read_time: readTime,
       published: true,
