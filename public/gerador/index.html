@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gerador de Conteúdo — Sistema A.C.A.D.E.M.I.A.</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: -apple-system, Segoe UI, Roboto, sans-serif;
+    background: #f8fafc; color: #1e1b4b;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 32px 20px 80px; }
+  h1 { font-size: 1.6rem; margin-bottom: 4px; }
+  .sub { color: #6b7280; margin-bottom: 28px; }
+  .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+  label { display: block; font-weight: 600; font-size: 0.9rem; margin: 14px 0 6px; }
+  input[type=email], input[type=password], input[type=text], textarea, select {
+    width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 0.95rem;
+    font-family: inherit;
+  }
+  textarea { min-height: 80px; resize: vertical; }
+  select[multiple] { min-height: 120px; }
+  button {
+    background: #7c3aed; color: #fff; border: none; padding: 11px 22px; border-radius: 8px;
+    font-weight: 600; cursor: pointer; font-size: 0.95rem; margin-top: 16px;
+  }
+  button:hover { background: #6d28d9; }
+  button:disabled { background: #c4b5fd; cursor: not-allowed; }
+  button.secondary { background: #f3f4f6; color: #1e1b4b; }
+  button.secondary:hover { background: #e5e7eb; }
+  .hint { color: #9ca3af; font-size: 0.8rem; margin-top: 4px; }
+  .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  #login-error, #gen-error { color: #dc2626; font-size: 0.9rem; margin-top: 10px; }
+  #app { display: none; }
+  .preview { border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin-top: 16px; background: #fafafa; }
+  .preview h2.pv-title { font-size: 1.3rem; margin: 0 0 8px; }
+  .pv-excerpt { color: #6b7280; font-style: italic; margin-bottom: 16px; }
+  .toast { position: fixed; bottom: 24px; right: 24px; background: #111827; color: #fff; padding: 12px 18px; border-radius: 8px; font-size: 0.9rem; display: none; }
+  .badge { display: inline-block; background: #ede9fe; color: #6d28d9; font-size: 0.75rem; font-weight: 700; padding: 3px 8px; border-radius: 999px; margin-left: 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Gerador de Conteúdo <span class="badge">Sistema A.C.A.D.E.M.I.A.</span></h1>
+  <p class="sub">Ferramenta interna — gera posts de blog com IA usando os avatares e pilares do método.</p>
+
+  <div id="login" class="card">
+    <h3>Login</h3>
+    <label for="email">E-mail</label>
+    <input type="email" id="email" autocomplete="username" />
+    <label for="password">Senha</label>
+    <input type="password" id="password" autocomplete="current-password" />
+    <button id="btn-login">Entrar</button>
+    <div id="login-error"></div>
+  </div>
+
+  <div id="app">
+    <div class="card">
+      <div class="row" style="justify-content: space-between;">
+        <strong id="whoami"></strong>
+        <button class="secondary" id="btn-logout">Sair</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>1. Gerar rascunho</h3>
+      <label for="keyword">Palavra-chave / tema do post *</label>
+      <input type="text" id="keyword" placeholder="ex: bloqueio de escrita na dissertação de mestrado" />
+
+      <label for="avatar">Avatar foco (opcional)</label>
+      <select id="avatar"><option value="">— nenhum —</option></select>
+
+      <label for="modules">Pilares do método relacionados (opcional, Ctrl+clique pra múltiplos)</label>
+      <select id="modules" multiple></select>
+
+      <label for="marketdata">Dados de mercado pra citar (opcional)</label>
+      <select id="marketdata" multiple></select>
+
+      <label for="diretrizes">Outras diretrizes (opcional)</label>
+      <textarea id="diretrizes" placeholder="ex: focar em doutorandos na reta final, tom mais motivacional"></textarea>
+
+      <button id="btn-generate">Gerar post com IA</button>
+      <span id="gen-loading" class="hint" style="display:none;">Gerando... isso pode levar 20-40s.</span>
+      <div id="gen-error"></div>
+    </div>
+
+    <div class="card" id="preview-card" style="display:none;">
+      <h3>2. Revisar e publicar</h3>
+      <div class="preview">
+        <h2 class="pv-title" id="pv-title"></h2>
+        <div class="pv-excerpt" id="pv-excerpt"></div>
+        <div id="pv-content"></div>
+      </div>
+      <label for="category">Categoria</label>
+      <input type="text" id="category" value="Produtividade Acadêmica" />
+      <button id="btn-publish">Publicar no blog</button>
+      <button class="secondary" id="btn-discard">Descartar</button>
+      <div id="pub-error"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL = "https://xqippijwsekuccgsjzrp.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_cNqUV3FPssYu2aSgHWZQiw_2aQBUNnt";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let lastGeneration = null; // { generation_id, title, excerpt, content }
+
+function toast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.style.display = "block";
+  setTimeout(() => (t.style.display = "none"), 4000);
+}
+
+function slugify(text) {
+  return text
+    .normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+async function checkSession() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("app").style.display = "block";
+    document.getElementById("whoami").textContent = "Logado como: " + session.user.email;
+    await loadOptions();
+  } else {
+    document.getElementById("login").style.display = "block";
+    document.getElementById("app").style.display = "none";
+  }
+}
+
+async function loadOptions() {
+  const { data: avatars } = await sb.from("cg_avatars").select("id,name").order("id");
+  const avatarSel = document.getElementById("avatar");
+  avatarSel.innerHTML = '<option value="">— nenhum —</option>';
+  (avatars || []).forEach((a) => {
+    const opt = document.createElement("option");
+    opt.value = a.id; opt.textContent = a.name;
+    avatarSel.appendChild(opt);
+  });
+
+  const { data: modules } = await sb.from("cg_modules").select("id,letter,title").order("module_number");
+  const modSel = document.getElementById("modules");
+  modSel.innerHTML = "";
+  (modules || []).forEach((m) => {
+    const opt = document.createElement("option");
+    opt.value = m.id; opt.textContent = `${m.letter} — ${m.title}`;
+    modSel.appendChild(opt);
+  });
+
+  const { data: market } = await sb.from("cg_market_data").select("id,category,statistic").order("id");
+  const mdSel = document.getElementById("marketdata");
+  mdSel.innerHTML = "";
+  (market || []).forEach((d) => {
+    const opt = document.createElement("option");
+    opt.value = d.id; opt.textContent = `${d.category}: ${d.statistic.slice(0, 60)}...`;
+    mdSel.appendChild(opt);
+  });
+}
+
+document.getElementById("btn-login").addEventListener("click", async () => {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const errEl = document.getElementById("login-error");
+  errEl.textContent = "";
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+  if (error) { errEl.textContent = error.message; return; }
+  await checkSession();
+});
+
+document.getElementById("btn-logout").addEventListener("click", async () => {
+  await sb.auth.signOut();
+  await checkSession();
+});
+
+function selectedValues(id) {
+  return Array.from(document.getElementById(id).selectedOptions).map((o) => o.value);
+}
+
+document.getElementById("btn-generate").addEventListener("click", async () => {
+  const keyword = document.getElementById("keyword").value.trim();
+  const errEl = document.getElementById("gen-error");
+  errEl.textContent = "";
+  if (!keyword) { errEl.textContent = "Informe a palavra-chave/tema."; return; }
+
+  const avatarId = document.getElementById("avatar").value || null;
+  const moduleIds = selectedValues("modules").map(Number);
+  const marketDataIds = selectedValues("marketdata").map(Number);
+  const diretrizes = document.getElementById("diretrizes").value.trim();
+
+  const btn = document.getElementById("btn-generate");
+  btn.disabled = true;
+  document.getElementById("gen-loading").style.display = "inline";
+
+  try {
+    const { data, error } = await sb.functions.invoke("generate-blog-post", {
+      body: { keyword, avatar_id: avatarId ? Number(avatarId) : null, module_ids: moduleIds, market_data_ids: marketDataIds, diretrizes },
+    });
+    if (error) throw error;
+    if (data.error) throw new Error(data.error + (data.details ? ": " + JSON.stringify(data.details) : ""));
+
+    lastGeneration = data;
+    document.getElementById("pv-title").textContent = data.title;
+    document.getElementById("pv-excerpt").textContent = data.excerpt;
+    document.getElementById("pv-content").innerHTML = data.content;
+    document.getElementById("preview-card").style.display = "block";
+    document.getElementById("preview-card").scrollIntoView({ behavior: "smooth" });
+  } catch (e) {
+    errEl.textContent = "Erro: " + (e.message || e);
+  } finally {
+    btn.disabled = false;
+    document.getElementById("gen-loading").style.display = "none";
+  }
+});
+
+document.getElementById("btn-discard").addEventListener("click", () => {
+  lastGeneration = null;
+  document.getElementById("preview-card").style.display = "none";
+});
+
+document.getElementById("btn-publish").addEventListener("click", async () => {
+  if (!lastGeneration) return;
+  const errEl = document.getElementById("pub-error");
+  errEl.textContent = "";
+  const category = document.getElementById("category").value.trim() || "Produtividade Acadêmica";
+  const slug = slugify(lastGeneration.title);
+  const wordCount = lastGeneration.content.replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean).length;
+  const readTime = Math.max(1, Math.round(wordCount / 200)) + " min";
+
+  const btn = document.getElementById("btn-publish");
+  btn.disabled = true;
+  try {
+    const { data: post, error } = await sb.from("posts").insert({
+      slug,
+      title: lastGeneration.title,
+      excerpt: lastGeneration.excerpt,
+      content: lastGeneration.content,
+      category,
+      read_time: readTime,
+      published: true,
+      published_at: new Date().toISOString(),
+    }).select().single();
+    if (error) throw error;
+
+    await sb.from("cg_generations").update({ published_post_id: post.id }).eq("id", lastGeneration.generation_id);
+
+    toast("Publicado! /blog/" + slug);
+    document.getElementById("preview-card").style.display = "none";
+    document.getElementById("keyword").value = "";
+    document.getElementById("diretrizes").value = "";
+    lastGeneration = null;
+  } catch (e) {
+    errEl.textContent = "Erro ao publicar: " + (e.message || e);
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+checkSession();
+</script>
+</body>
+</html>

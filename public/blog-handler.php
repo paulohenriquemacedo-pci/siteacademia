@@ -25,8 +25,8 @@ if (!$isBot || !$slug) {
 }
 
 // É um BOT. Buscamos os dados do post via Supabase REST API
-$supabaseUrl = "https://douhwqlpfgwuqwturdjw.supabase.co";
-$supabaseKey = "sb_publishable_LsZl_8bu679aM6USbBhCxA_-onUE_wX"; // Chave Anon/Publishable
+$supabaseUrl = "https://xqippijwsekuccgsjzrp.supabase.co";
+$supabaseKey = "sb_publishable_cNqUV3FPssYu2aSgHWZQiw_2aQBUNnt"; // Chave Anon/Publishable
 
 $apiUrl = $supabaseUrl . "/rest/v1/posts?slug=eq." . urlencode($slug) . "&select=title,excerpt,image_url";
 
