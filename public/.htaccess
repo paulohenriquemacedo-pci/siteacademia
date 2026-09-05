@@ -6,6 +6,9 @@
   RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|facebot|twitterbot|linkedinbot|whatsapp|telegrambot|slackbot|discordbot|googlebot|bingbot|applebot) [NC]
   RewriteRule ^blog/([^/]+)$ /blog-handler.php?slug=$1 [L]
 
+  # Ferramenta interna do gerador de conteúdo (página estática, fora do SPA)
+  RewriteRule ^gerador/?$ /gerador/index.html [L]
+
   # SPA Routing padrão
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
